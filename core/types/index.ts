@@ -27,9 +27,10 @@ export interface Day {
   date: Date;
   dayNumber: string;
   formatDay: string;
-  isCheckOut: boolean;
-  isCheckIn: boolean;
   isBetweenCheckInCheckOut: boolean;
+  isCheckIn: boolean;
+  isCheckOut: boolean;
+  isDisabled: boolean;
   style: {
     [key: string]: string;
   };
