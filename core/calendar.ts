@@ -4,14 +4,16 @@ import {
   useCreateMultipleMonths,
   useFlatBooking,
   useGetNextBookingDate,
+  useGetPeriod,
 } from "./services";
 
 import {
   addDays,
-  getMonthDiff,
   getDatesBetweenTwoDates,
-  isDateBefore,
+  getMonthDiff,
   isDateAfter,
+  isDateBefore,
+  validateDateBetweenTwoDates,
 } from "./helpers";
 
 import { format } from "./plugins/day";
@@ -75,6 +77,7 @@ class Calendar extends Presenter<VmCalendar> {
   bookingColor: BookingColor;
   bookingDates: Booking[];
   checkIncheckOutHalfDay: CheckInCheckOutHalfDay;
+  currentPeriod: Period;
   disabledDates: string[];
   disabledDaysBeforeDayDate: Boolean;
   flatBookingDates: FlatBooking[];
@@ -82,6 +85,10 @@ class Calendar extends Presenter<VmCalendar> {
   newBookingDate: Booking[];
   newBookingDates: Booking[];
   nextDisableBookingDate: Date;
+  nightlyPeriods: string[];
+  periodDates: Period[];
+  saturdayWeeklyPeriods: string[];
+  sundayWeeklyPeriods: string[];
   today: Date;
 
   constructor({
@@ -90,6 +97,7 @@ class Calendar extends Presenter<VmCalendar> {
     bookingDates = [],
     disabledDaysBeforeDayDate,
     endDate,
+    periodDates = [],
     startDate,
   }: TypeCalendar) {
     const countOfMonth = getMonthDiff(startDate, endDate);
@@ -110,12 +118,74 @@ class Calendar extends Presenter<VmCalendar> {
     this.newBookingDate = [];
     this.checkIncheckOutHalfDay = {};
 
+    // PeriodDates
+    this.currentPeriod = null;
+    this.periodDates = periodDates;
+    this.saturdayWeeklyPeriods = [];
+    this.sundayWeeklyPeriods = [];
+    this.nightlyPeriods = [];
+
     // Booking Dates / Booked Dates
     this.bookedDates = bookedDates;
     this.bookingColor = bookingColor;
     this.bookingDates = bookingDates;
 
     this.setStyleOnDay();
+  }
+
+  getCurrentPeriod(day: Day) {
+    const currentPeriod = this.periodDates.find((period: Period) => {
+      if (
+        period.endAt !== day.formatDay &&
+        (period.startAt === day.formatDay ||
+          validateDateBetweenTwoDates(
+            period.startAt,
+            period.endAt,
+            day.formatDay
+          ))
+      ) {
+        return period;
+      }
+    });
+
+    if (currentPeriod) {
+      const durationType =
+        currentPeriod.periodType === "weekly_by_saturday" ||
+        currentPeriod.periodType === "weekly_by_sunday"
+          ? "week"
+          : "day";
+      const minimumDuration =
+        durationType === "week"
+          ? currentPeriod.minimumDuration * 7
+          : currentPeriod.minimumDuration;
+
+      return {
+        ...currentPeriod,
+        nextEnableDate: addDays(day.date, minimumDuration),
+      };
+    }
+
+    return null;
+  }
+
+  setDifferentPeriodType() {
+    this.saturdayWeeklyPeriods = useGetPeriod(
+      this.periodDates,
+      "weekly_by_saturday",
+      this.formatDate
+    );
+
+    this.sundayWeeklyPeriods = useGetPeriod(
+      this.periodDates,
+      "weekly_by_sunday",
+      this.formatDate
+    );
+
+    this.nightlyPeriods = useGetPeriod(
+      this.periodDates,
+      "nightly",
+      this.formatDate
+    );
   }
 
   setStartActiveIndex(startDate) {
@@ -148,6 +218,7 @@ class Calendar extends Presenter<VmCalendar> {
   }
 
   setStyleOnDay() {
+    this.setDifferentPeriodType();
     this.setBookingDates();
     this.setHalfDay();
 
@@ -161,12 +232,17 @@ class Calendar extends Presenter<VmCalendar> {
         !this.isInCheckinHalfDayAndNotCheckin(d) &&
         !this.isInCheckoutHalfDay(d);
 
+      // Half Day
       const isCheckOutCheckInHalfDay = this.isInCheckoutHalfDay(d);
       const isCheckOutHalfDay = this.isInCheckoutHalfDay(d);
       const isCheckInHalfDay = this.isInCheckinHalfDayAndCheckin(d);
       const isInCheckinHalfDayAndNotCheckin =
         this.isInCheckinHalfDayAndNotCheckin(d);
-      // const inWeeklyPeriodsCheckin = this.inWeeklyPeriodsCheckin(d);
+
+      // Periods
+      const inWeeklyPeriodsCheckin = this.inWeeklyPeriodsCheckin(d);
+      const inWeeklyPeriods = this.inWeeklyPeriods(d);
+      const inNightlyPeriod = this.inNightlyPeriod(d);
 
       if (d.belongsToThisMonth) {
         if (isDisabled) {
@@ -208,11 +284,21 @@ class Calendar extends Presenter<VmCalendar> {
         }
 
         // Periods
-        // if (inWeeklyPeriodsCheckin) {
-        //   d.isInWeeklyPeriodsCheckin = true;
-        // } else {
-        //   d.isInWeeklyPeriodsCheckin = false;
-        // }
+        if (inWeeklyPeriodsCheckin) {
+          d.isInWeeklyPeriodsCheckin = true;
+        } else {
+          d.isInWeeklyPeriodsCheckin = false;
+        }
+        if (inWeeklyPeriods) {
+          d.isInWeeklyPeriods = true;
+        } else {
+          d.isInWeeklyPeriods = false;
+        }
+        if (inNightlyPeriod) {
+          d.isInNightlyPeriod = true;
+        } else {
+          d.isInNightlyPeriod = false;
+        }
       }
     });
   }
@@ -259,19 +345,36 @@ class Calendar extends Presenter<VmCalendar> {
     }
   }
 
-  // Is in
-  // inWeeklyPeriodsCheckin(day) {
-  //   return (
-  //     this.vm.checkIn !== day.date &&
-  //     this.currentPeriod?.nextEnableDate > day.date &&
-  //     (this.currentPeriod?.periodType === "weekly_by_saturday" ||
-  //       this.currentPeriod?.periodType === "weekly_by_sunday") &&
-  //     (this.saturdayWeeklyPeriods.includes(day.formatDay) ||
-  //       this.sundayWeeklyPeriods.includes(day.formatDay)) &&
-  //     (day.date.getDay() === 6 || day.date.getDay() === 0)
-  //   );
-  // }
+  // In periods
+  inWeeklyPeriods(day: Day) {
+    return (
+      (this.saturdayWeeklyPeriods.includes(day.formatDay) &&
+        day.date.getDay() !== 6) ||
+      (this.sundayWeeklyPeriods.includes(day.formatDay) &&
+        day.date.getDay() !== 0)
+    );
+  }
+  inNightlyPeriod(day: Day) {
+    return (
+      this.vm.checkIn !== day.date &&
+      this.currentPeriod?.nextEnableDate > day.date &&
+      this.currentPeriod?.periodType === "nightly" &&
+      this.nightlyPeriods.includes(day.formatDay)
+    );
+  }
+  inWeeklyPeriodsCheckin(day) {
+    return (
+      this.vm.checkIn !== day.date &&
+      this.currentPeriod?.nextEnableDate > day.date &&
+      (this.currentPeriod?.periodType === "weekly_by_saturday" ||
+        this.currentPeriod?.periodType === "weekly_by_sunday") &&
+      (this.saturdayWeeklyPeriods.includes(day.formatDay) ||
+        this.sundayWeeklyPeriods.includes(day.formatDay)) &&
+      (day.date.getDay() === 6 || day.date.getDay() === 0)
+    );
+  }
 
+  // Is in
   isInBookingDates(day: Day) {
     return (
       this.flatBookingDates.some((x) => x.value.includes(day.formatDay)) &&
@@ -357,20 +460,30 @@ class Calendar extends Presenter<VmCalendar> {
   clickOnCalendar(day: Day): void {
     const formatCheckIn = format(this.vm.checkIn, this.formatDate);
 
-    if (!day.isDisabled && !day.isInCheckinHalfDayAndNotCheckin) {
+    const enabledClick =
+      !day.isDisabled &&
+      !day.isInCheckinHalfDayAndNotCheckin &&
+      !day.isInWeeklyPeriodsCheckin &&
+      !day.isInWeeklyPeriods &&
+      !day.isInNightlyPeriod;
+
+    if (enabledClick) {
       if (day.formatDay === formatCheckIn) {
         // CheckIn when already CheckIn
         this.vm.checkIn = null;
         day.isCheckIn = false;
         this.nextDisableBookingDate = null;
+        this.currentPeriod = null;
       } else if (this.vm.checkIn && !this.vm.checkOut) {
         // CheckIn + !ChecKout
         this.setCheckOut(day);
         this.nextDisableBookingDate = null;
+        this.currentPeriod = null;
       } else if (!this.vm.checkIn) {
         // CheckIn
         this.setCheckIn(day);
         this.getNextBookingDate(day);
+        this.currentPeriod = this.getCurrentPeriod(day);
       } else {
         // CheckIn + CheckOut
         this.setCheckIn(day);
@@ -379,6 +492,7 @@ class Calendar extends Presenter<VmCalendar> {
         this.vm.checkOut = null;
         day.isCheckOut = false;
         this.cleanAttribute("isCheckOut");
+        this.currentPeriod = this.getCurrentPeriod(day);
       }
 
       this.setStyleOnDay();
