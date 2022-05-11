@@ -1,14 +1,41 @@
 <script setup lang="ts">
 import { Calendar, format } from "../../../core/calendar";
-import type { HeaderDay, TypeCalendar } from "../../../core/calendar";
+import { periodDates } from "../../../periodDates";
+import type { Booking, HeaderDay, TypeCalendar } from "../../../core/calendar";
 import { ref } from "vue";
 import type { Ref } from "vue";
 
 const startDate = new Date(new Date().getFullYear() - 2, 0, 1);
 const endDate = new Date(new Date().getFullYear() + 2, 0, 1);
+const bookedDates = [""];
+const bookingColor = {
+  admin: "#9dc1c9",
+  contract: "#a56a0b",
+};
+const bookingDates: Booking[] = [
+  {
+    checkInDate: "2022-05-14",
+    checkOutDate: "2022-05-18",
+    type: "admin",
+  },
+  {
+    checkInDate: "2022-05-24",
+    checkOutDate: "2022-05-28",
+    type: "contract",
+  },
+  {
+    checkInDate: "2022-06-01",
+    checkOutDate: "2022-06-20",
+    type: "contract",
+  },
+];
 const calendarParams: TypeCalendar = {
+  bookedDates,
+  bookingColor,
+  bookingDates,
   disabledDaysBeforeDayDate: true,
   endDate,
+  periodDates,
   startDate,
 };
 const calendar = new Calendar(calendarParams);
@@ -38,10 +65,12 @@ const vmCalendar = ref(calendar.vm);
     </template>
     <template v-else>Check-out</template>
   </div>
+
   <div class="calendar">
+    <button type="button" @click="vmCalendar.paginate('-')">⬅</button>
     <div
       :key="month.monthKey"
-      v-for="month in vmCalendar.months.slice(27, 29)"
+      v-for="month in vmCalendar.slicedMonths"
       class="wrap_month"
     >
       <div>{{ month.monthName }}</div>
@@ -59,6 +88,7 @@ const vmCalendar = ref(calendar.vm);
               'day--check-out': day.isCheckOut,
               'day--disabled': day.isDisabled,
               'day--check-in-check-out': day.isBetweenCheckInCheckOut,
+              'day--booking': day.isBookingDate,
             },
           ]"
           :key="day.date"
@@ -67,10 +97,27 @@ const vmCalendar = ref(calendar.vm);
         >
           <template v-if="day.belongsToThisMonth">
             {{ day.dayNumber }}
+            <i
+              v-if="
+                day.isCheckInCheckOutHalfDay ||
+                day.isCheckInHalfDay ||
+                day.isInCheckinHalfDayAndNotCheckin
+              "
+              :class="[
+                'calendar_day_haldDay',
+                {
+                  'calendar_day_haldDay--checkIn':
+                    day.isCheckInHalfDay || day.isInCheckinHalfDayAndNotCheckin,
+                  'calendar_day_haldDay--checkOut': day.isCheckOutHalfDay,
+                },
+              ]"
+            />
           </template>
         </button>
       </div>
     </div>
+
+    <button type="button" @click="vmCalendar.paginate('+')">⬅</button>
   </div>
 </template>
 
@@ -93,6 +140,7 @@ const vmCalendar = ref(calendar.vm);
   grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 .day {
+  overflow: hidden;
   position: relative;
   height: 0px;
   border-width: 0.5px;
@@ -118,5 +166,25 @@ const vmCalendar = ref(calendar.vm);
 }
 .day--disabled {
   background: #ececec;
+}
+.day--booking {
+  background: violet;
+}
+
+/* New */
+.calendar_day_haldDay {
+  width: 200%;
+  height: 200%;
+  position: absolute;
+  transform: rotate(45deg);
+  background: violet;
+}
+.calendar_day_haldDay--checkIn {
+  top: 0px;
+  right: -140%;
+}
+.calendar_day_haldDay--checkOut {
+  top: -140%;
+  right: 0;
 }
 </style>

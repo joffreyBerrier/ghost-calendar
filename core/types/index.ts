@@ -28,9 +28,15 @@ export interface Day {
   dayNumber: string;
   formatDay: string;
   isBetweenCheckInCheckOut: boolean;
+  isBookingDate: boolean;
   isCheckIn: boolean;
+  isCheckInCheckOutHalfDay: boolean;
+  isCheckInHalfDay: boolean;
   isCheckOut: boolean;
+  isCheckOutHalfDay: boolean;
   isDisabled: boolean;
+  isInCheckinHalfDayAndNotCheckin: boolean;
+  isInWeeklyPeriodsCheckin: boolean;
   style: {
     [key: string]: string;
   };

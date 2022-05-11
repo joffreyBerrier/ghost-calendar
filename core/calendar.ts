@@ -1,57 +1,218 @@
-import { useCreateMultipleMonths } from "./services/useCreateMultipleMonths";
-import { getMonthDiff, getDatesBetweenTwoDates, isDateBefore } from "./helpers";
+import {
+  useCheckIncheckOutHalfDay,
+  useCreateHalfDayDates,
+  useCreateMultipleMonths,
+  useFlatBooking,
+  useGetNextBookingDate,
+} from "./services";
+
+import {
+  addDays,
+  getMonthDiff,
+  getDatesBetweenTwoDates,
+  isDateBefore,
+  isDateAfter,
+} from "./helpers";
 
 import { format } from "./plugins/day";
 
-import { Day, Month, HeaderDay } from "./types";
+import {
+  Booking,
+  BookingColor,
+  CheckInCheckOutHalfDay,
+  Day,
+  FlatBooking,
+  HeaderDay,
+  Month,
+  Period,
+} from "./types";
 
-export type { HeaderDay };
+export type { HeaderDay, Booking, Period };
+
+export type TypeCalendar = {
+  bookedDates: string[];
+  bookingColor: BookingColor;
+  bookingDates: Booking[];
+  checkIncheckOutHalfDay: CheckInCheckOutHalfDay;
+  disabledDaysBeforeDayDate: boolean;
+  endDate: Date;
+  flatBookingDates: FlatBooking[];
+  periodDates: Period[];
+  startDate: Date;
+};
 
 abstract class Presenter<T> {
   constructor(public vm: T) {}
 }
 
 class VmCalendar {
+  activeIndex = 0;
   checkIn = null;
   checkOut = null;
   months = [];
+  setBookingDates = () => {};
+
+  get slicedMonths() {
+    const count = 2;
+
+    return this.months.slice(this.activeIndex, count + this.activeIndex);
+  }
+
+  paginate(operator: string): void {
+    const count = 1;
+
+    if (operator === "-") {
+      this.activeIndex -= count;
+    }
+    if (operator === "+") {
+      this.activeIndex += count;
+    }
+  }
 }
 
 class Calendar extends Presenter<VmCalendar> {
-  disabledDates: Array<string>;
+  bookedDates: string[];
+  bookingColor: BookingColor;
+  bookingDates: Booking[];
+  checkIncheckOutHalfDay: CheckInCheckOutHalfDay;
+  disabledDates: string[];
   disabledDaysBeforeDayDate: Boolean;
+  flatBookingDates: FlatBooking[];
   formatDate: string;
+  newBookingDate: Booking[];
+  newBookingDates: Booking[];
+  nextDisableBookingDate: Date;
   today: Date;
 
-  constructor(
-    startDate: Date,
-    endDate: Date,
-    disabledDaysBeforeDayDate: boolean
-  ) {
+  constructor({
+    bookedDates = [],
+    bookingColor = {},
+    bookingDates = [],
+    disabledDaysBeforeDayDate,
+    endDate,
+    startDate,
+  }: TypeCalendar) {
     const countOfMonth = getMonthDiff(startDate, endDate);
     const multipleMonths = useCreateMultipleMonths(startDate, countOfMonth);
 
     super(new VmCalendar());
+    // Vm
     this.vm.months = multipleMonths;
-
-    this.disabledDaysBeforeDayDate = disabledDaysBeforeDayDate;
-    this.formatDate = "YYYY-MM-DD";
-    this.today = new Date();
+    this.vm.activeIndex = this.setStartActiveIndex(startDate);
     this.vm.checkIn = null;
     this.vm.checkOut = null;
 
-    this.disabledDates = [];
-    this.setDisabledDays();
+    // Core logic
+    this.formatDate = "YYYY-MM-DD";
+    this.disabledDaysBeforeDayDate = disabledDaysBeforeDayDate;
+    this.today = new Date();
+    this.nextDisableBookingDate = null;
+    this.newBookingDate = [];
+    this.checkIncheckOutHalfDay = {};
+
+    // Booking Dates / Booked Dates
+    this.bookedDates = bookedDates;
+    this.bookingColor = bookingColor;
+    this.bookingDates = bookingDates;
+
+    this.setStyleOnDay();
   }
 
-  setDisabledDays() {
+  setStartActiveIndex(startDate) {
+    return getMonthDiff(startDate, new Date()) - 1;
+  }
+
+  setBookingDates() {
+    const res = useCreateHalfDayDates(
+      this.bookingDates,
+      this.bookedDates,
+      this.bookingColor,
+      this.formatDate
+    );
+
+    this.flatBookingDates = useFlatBooking(
+      this.bookingDates,
+      this.bookingColor,
+      this.formatDate
+    );
+
+    this.disabledDates = res.disabledDates;
+    this.newBookingDates = res.newBookingDates;
+  }
+
+  setHalfDay() {
+    this.checkIncheckOutHalfDay = useCheckIncheckOutHalfDay(
+      this.bookingDates,
+      this.bookedDates
+    );
+  }
+
+  setStyleOnDay() {
+    this.setBookingDates();
+    this.setHalfDay();
+
     const days = this.getDays();
 
     days.forEach((d: Day) => {
-      if (this.inDisabledDay(d) && d.belongsToThisMonth) {
-        d.isDisabled = true;
-      } else {
-        d.isDisabled = false;
+      const isDisabled = this.inDisabledDay(d);
+      const isBooking =
+        this.isInBookingDates(d) &&
+        !this.isInCheckinHalfDayAndCheckin(d) &&
+        !this.isInCheckinHalfDayAndNotCheckin(d) &&
+        !this.isInCheckoutHalfDay(d);
+
+      const isCheckOutCheckInHalfDay = this.isInCheckoutHalfDay(d);
+      const isCheckOutHalfDay = this.isInCheckoutHalfDay(d);
+      const isCheckInHalfDay = this.isInCheckinHalfDayAndCheckin(d);
+      const isInCheckinHalfDayAndNotCheckin =
+        this.isInCheckinHalfDayAndNotCheckin(d);
+      // const inWeeklyPeriodsCheckin = this.inWeeklyPeriodsCheckin(d);
+
+      if (d.belongsToThisMonth) {
+        if (isDisabled) {
+          d.isDisabled = true;
+        } else {
+          d.isDisabled = false;
+        }
+
+        // Bookings
+        if (isBooking) {
+          d.isBookingDate = true;
+        } else {
+          d.isBookingDate = false;
+        }
+
+        // HalfDays
+        if (isCheckOutCheckInHalfDay) {
+          d.isCheckInCheckOutHalfDay = true;
+        } else {
+          d.isCheckInCheckOutHalfDay = false;
+        }
+
+        if (isCheckInHalfDay) {
+          d.isCheckInHalfDay = true;
+        } else {
+          d.isCheckInHalfDay = false;
+        }
+
+        if (isCheckOutHalfDay) {
+          d.isCheckOutHalfDay = true;
+        } else {
+          d.isCheckOutHalfDay = false;
+        }
+
+        if (isInCheckinHalfDayAndNotCheckin) {
+          d.isInCheckinHalfDayAndNotCheckin = true;
+        } else {
+          d.isInCheckinHalfDayAndNotCheckin = false;
+        }
+
+        // Periods
+        // if (inWeeklyPeriodsCheckin) {
+        //   d.isInWeeklyPeriodsCheckin = true;
+        // } else {
+        //   d.isInWeeklyPeriodsCheckin = false;
+        // }
       }
     });
   }
@@ -84,17 +245,66 @@ class Calendar extends Presenter<VmCalendar> {
     return format(this.today, this.formatDate);
   }
 
+  getNextBookingDate(day: Day) {
+    if (this.newBookingDates.length > 0) {
+      let newDate = day.date;
+      if (this.checkIncheckOutHalfDay[day.formatDay]?.checkOut) {
+        newDate = addDays(day.date, 1);
+      }
+
+      this.nextDisableBookingDate = useGetNextBookingDate(
+        this.newBookingDates,
+        newDate
+      );
+    }
+  }
+
+  // Is in
+  // inWeeklyPeriodsCheckin(day) {
+  //   return (
+  //     this.vm.checkIn !== day.date &&
+  //     this.currentPeriod?.nextEnableDate > day.date &&
+  //     (this.currentPeriod?.periodType === "weekly_by_saturday" ||
+  //       this.currentPeriod?.periodType === "weekly_by_sunday") &&
+  //     (this.saturdayWeeklyPeriods.includes(day.formatDay) ||
+  //       this.sundayWeeklyPeriods.includes(day.formatDay)) &&
+  //     (day.date.getDay() === 6 || day.date.getDay() === 0)
+  //   );
+  // }
+
+  isInBookingDates(day: Day) {
+    return (
+      this.flatBookingDates.some((x) => x.value.includes(day.formatDay)) &&
+      day.belongsToThisMonth &&
+      !this.isInCheckoutHalfDay(day)
+    );
+  }
+  isInCheckinHalfDayAndCheckin(day: Day): boolean {
+    return (
+      Boolean(this.checkIncheckOutHalfDay[day.formatDay]?.checkIn) &&
+      Boolean(this.vm.checkIn)
+    );
+  }
+  isInCheckinHalfDayAndNotCheckin(day: Day): boolean {
+    return (
+      Boolean(this.checkIncheckOutHalfDay[day.formatDay]?.checkIn) &&
+      Boolean(!this.vm.checkIn)
+    );
+  }
+  isInCheckoutHalfDay(day: Day): boolean {
+    return Boolean(this.checkIncheckOutHalfDay[day.formatDay]?.checkOut);
+  }
   inDisabledDay(day: Day): boolean {
     return (
       (this.disabledDaysBeforeDayDate &&
         day.formatDay !== this.formatToday() &&
         this.today > day.date) ||
-      isDateBefore(day.date, this.vm.checkIn)
-      // (disabledDates.includes(day.formatDay) &&
-      //   !checkIncheckOutHalfDay[day.formatDay]) ||
-      // (this.vm.checkIn &&
-      //   nextDisableBookingDate &&
-      //   isDateAfter(day.date, nextDisableBookingDate))
+      isDateBefore(day.date, this.vm.checkIn) ||
+      (this.disabledDates.includes(day.formatDay) &&
+        !this.checkIncheckOutHalfDay[day.formatDay]) ||
+      (this.vm.checkIn &&
+        this.nextDisableBookingDate &&
+        isDateAfter(day.date, this.nextDisableBookingDate))
     );
   }
 
@@ -117,48 +327,62 @@ class Calendar extends Presenter<VmCalendar> {
   }
 
   setCheckIn(day: Day): void {
-    this.cleanAttribute("isCheckIn");
-    this.cleanAttribute("isCheckOut");
-    this.cleanAttributes("isBetweenCheckInCheckOut");
+    if (!day.isDisabled) {
+      this.cleanAttribute("isCheckIn");
+      this.cleanAttribute("isCheckOut");
+      this.cleanAttributes("isBetweenCheckInCheckOut");
 
-    if (day.belongsToThisMonth) {
-      this.vm.checkIn = day.date;
+      if (day.belongsToThisMonth) {
+        this.vm.checkIn = day.date;
 
-      day.isCheckIn = true;
+        day.isCheckIn = true;
+      }
     }
   }
 
   setCheckOut(day: Day): void {
-    this.cleanAttribute("isCheckOut");
+    if (!day.isDisabled) {
+      this.cleanAttribute("isCheckOut");
 
-    if (day.belongsToThisMonth) {
-      this.vm.checkOut = day.date;
+      if (day.belongsToThisMonth) {
+        this.vm.checkOut = day.date;
 
-      day.isCheckOut = true;
+        day.isCheckOut = true;
 
-      this.setColorBetweenTwoDates(this.vm.checkIn, this.vm.checkOut);
+        this.setColorBetweenTwoDates(this.vm.checkIn, this.vm.checkOut);
+      }
     }
   }
 
   clickOnCalendar(day: Day): void {
     const formatCheckIn = format(this.vm.checkIn, this.formatDate);
 
-    if (day.formatDay === formatCheckIn) {
-      this.vm.checkIn = null;
-      day.isCheckIn = false;
-    } else if (this.vm.checkIn && !this.vm.checkOut) {
-      this.setCheckOut(day);
-    } else if (!this.vm.checkIn) {
-      this.setCheckIn(day);
-    } else {
-      this.setCheckIn(day);
+    if (!day.isDisabled && !day.isInCheckinHalfDayAndNotCheckin) {
+      if (day.formatDay === formatCheckIn) {
+        // CheckIn when already CheckIn
+        this.vm.checkIn = null;
+        day.isCheckIn = false;
+        this.nextDisableBookingDate = null;
+      } else if (this.vm.checkIn && !this.vm.checkOut) {
+        // CheckIn + !ChecKout
+        this.setCheckOut(day);
+        this.nextDisableBookingDate = null;
+      } else if (!this.vm.checkIn) {
+        // CheckIn
+        this.setCheckIn(day);
+        this.getNextBookingDate(day);
+      } else {
+        // CheckIn + CheckOut
+        this.setCheckIn(day);
+        this.getNextBookingDate(day);
 
-      this.vm.checkOut = null;
-      day.isCheckOut = false;
-      this.cleanAttribute("isCheckOut");
+        this.vm.checkOut = null;
+        day.isCheckOut = false;
+        this.cleanAttribute("isCheckOut");
+      }
+
+      this.setStyleOnDay();
     }
-
-    this.setDisabledDays();
   }
 }
 
