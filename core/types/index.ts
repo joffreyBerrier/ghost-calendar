@@ -36,6 +36,7 @@ export interface Day {
   isCheckOutHalfDay: boolean;
   isDisabled: boolean;
   isInCheckinHalfDayAndNotCheckin: boolean;
+  isInWeeklyPeriodsCheckin: boolean;
   style: {
     [key: string]: string;
   };

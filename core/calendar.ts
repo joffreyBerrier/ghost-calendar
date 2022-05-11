@@ -140,6 +140,7 @@ class Calendar extends Presenter<VmCalendar> {
       const isCheckInHalfDay = this.isInCheckinHalfDayAndCheckin(d);
       const isInCheckinHalfDayAndNotCheckin =
         this.isInCheckinHalfDayAndNotCheckin(d);
+      // const inWeeklyPeriodsCheckin = this.inWeeklyPeriodsCheckin(d);
 
       if (d.belongsToThisMonth) {
         if (isDisabled) {
@@ -148,12 +149,14 @@ class Calendar extends Presenter<VmCalendar> {
           d.isDisabled = false;
         }
 
+        // Bookings
         if (isBooking) {
           d.isBookingDate = true;
         } else {
           d.isBookingDate = false;
         }
 
+        // HalfDays
         if (isCheckOutCheckInHalfDay) {
           d.isCheckInCheckOutHalfDay = true;
         } else {
@@ -177,6 +180,13 @@ class Calendar extends Presenter<VmCalendar> {
         } else {
           d.isInCheckinHalfDayAndNotCheckin = false;
         }
+
+        // Periods
+        // if (inWeeklyPeriodsCheckin) {
+        //   d.isInWeeklyPeriodsCheckin = true;
+        // } else {
+        //   d.isInWeeklyPeriodsCheckin = false;
+        // }
       }
     });
   }
@@ -224,6 +234,18 @@ class Calendar extends Presenter<VmCalendar> {
   }
 
   // Is in
+  // inWeeklyPeriodsCheckin(day) {
+  //   return (
+  //     this.vm.checkIn !== day.date &&
+  //     this.currentPeriod?.nextEnableDate > day.date &&
+  //     (this.currentPeriod?.periodType === "weekly_by_saturday" ||
+  //       this.currentPeriod?.periodType === "weekly_by_sunday") &&
+  //     (this.saturdayWeeklyPeriods.includes(day.formatDay) ||
+  //       this.sundayWeeklyPeriods.includes(day.formatDay)) &&
+  //     (day.date.getDay() === 6 || day.date.getDay() === 0)
+  //   );
+  // }
+
   isInBookingDates(day: Day) {
     return (
       this.flatBookingDates.some((x) => x.value.includes(day.formatDay)) &&
@@ -309,30 +331,32 @@ class Calendar extends Presenter<VmCalendar> {
   clickOnCalendar(day: Day): void {
     const formatCheckIn = format(this.vm.checkIn, this.formatDate);
 
-    if (day.formatDay === formatCheckIn) {
-      // CheckIn when already CheckIn
-      this.vm.checkIn = null;
-      day.isCheckIn = false;
-      this.nextDisableBookingDate = null;
-    } else if (this.vm.checkIn && !this.vm.checkOut) {
-      // CheckIn + !ChecKout
-      this.setCheckOut(day);
-      this.nextDisableBookingDate = null;
-    } else if (!this.vm.checkIn) {
-      // CheckIn
-      this.setCheckIn(day);
-      this.getNextBookingDate(day);
-    } else {
-      // CheckIn + CheckOut
-      this.setCheckIn(day);
-      this.getNextBookingDate(day);
+    if (!day.isDisabled && !day.isInCheckinHalfDayAndNotCheckin) {
+      if (day.formatDay === formatCheckIn) {
+        // CheckIn when already CheckIn
+        this.vm.checkIn = null;
+        day.isCheckIn = false;
+        this.nextDisableBookingDate = null;
+      } else if (this.vm.checkIn && !this.vm.checkOut) {
+        // CheckIn + !ChecKout
+        this.setCheckOut(day);
+        this.nextDisableBookingDate = null;
+      } else if (!this.vm.checkIn) {
+        // CheckIn
+        this.setCheckIn(day);
+        this.getNextBookingDate(day);
+      } else {
+        // CheckIn + CheckOut
+        this.setCheckIn(day);
+        this.getNextBookingDate(day);
 
-      this.vm.checkOut = null;
-      day.isCheckOut = false;
-      this.cleanAttribute("isCheckOut");
+        this.vm.checkOut = null;
+        day.isCheckOut = false;
+        this.cleanAttribute("isCheckOut");
+      }
+
+      this.setStyleOnDay();
     }
-
-    this.setStyleOnDay();
   }
 }
 

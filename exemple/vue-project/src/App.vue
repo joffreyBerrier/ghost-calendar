@@ -63,6 +63,7 @@ const vmCalendar = ref(calendar.vm);
     </template>
     <template v-else>Check-out</template>
   </div>
+
   <div class="calendar">
     <div
       :key="month.monthKey"
