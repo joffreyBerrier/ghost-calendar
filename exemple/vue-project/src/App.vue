@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { Calendar, format } from "../../../core/calendar";
-import type { HeaderDay } from "../../../core/calendar";
+import type { HeaderDay, TypeCalendar } from "../../../core/calendar";
 import { ref } from "vue";
 import type { Ref } from "vue";
 
 const startDate = new Date(new Date().getFullYear() - 2, 0, 1);
 const endDate = new Date(new Date().getFullYear() + 2, 0, 1);
-const calendar = new Calendar(startDate, endDate, true);
+const calendarParams: TypeCalendar = {
+  disabledDaysBeforeDayDate: true,
+  endDate,
+  startDate,
+};
+const calendar = new Calendar(calendarParams);
 
 const days: Ref<HeaderDay[]> = ref([
   { key: 1, name: "Mo" },
