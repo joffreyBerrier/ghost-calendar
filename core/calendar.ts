@@ -123,7 +123,6 @@ class Calendar extends Presenter<VmCalendar> {
 
     if (day.belongsToThisMonth) {
       this.vm.checkIn = day.date;
-
       day.isCheckIn = true;
     }
   }
