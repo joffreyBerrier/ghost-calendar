@@ -89,6 +89,9 @@ const vmCalendar = ref(calendar.vm);
               'day--disabled': day.isDisabled,
               'day--check-in-check-out': day.isBetweenCheckInCheckOut,
               'day--booking': day.isBookingDate,
+              'calendar_day--in-period': day.isInWeeklyPeriods,
+              'calendar_day--in-period-checkIn':
+                day.isInWeeklyPeriodsCheckin || day.isInNightlyPeriod,
             },
           ]"
           :key="day.date"
@@ -147,6 +150,7 @@ const vmCalendar = ref(calendar.vm);
   padding-bottom: 100%;
   border-color: #ccc;
   background: transparent;
+  font-weight: 400;
 }
 .mx-2 {
   margin-left: 0.4rem;
@@ -169,6 +173,13 @@ const vmCalendar = ref(calendar.vm);
 }
 .day--booking {
   background: violet;
+}
+
+/* Periods */
+.calendar_day--in-period,
+.calendar_day--in-period-checkIn {
+  font-weight: 200;
+  color: gray;
 }
 
 /* New */
