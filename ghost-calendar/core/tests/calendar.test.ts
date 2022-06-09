@@ -1,6 +1,6 @@
-import Calendar from "../core/Calendar";
-import { CalendarPresenter } from "../core/CalendarPresenter";
-import { Period } from "../core/helpers/types";
+import Calendar from "../Calendar";
+import { CalendarPresenter } from "../CalendarPresenter";
+import { Period } from "../helpers/types";
 
 const Periods: Required<Period>[] = [
   {

@@ -1,4 +1,4 @@
-import Day from "../core/Day";
+import Day from "../Day";
 
 describe("Day", () => {
   test("Should return full date", () => {

@@ -1,9 +1,11 @@
 import { StyleSheet, Dimensions } from "react-native";
 
+import { DayType, TypeBookingFormatted } from "ghost-calendar";
 import {
-  DayType,
-  TypeBookingFormatted,
-} from "../../ghost-calendar/core/helpers/types";
+  communStyleType,
+  leftBookingStyleType,
+  rightBookingStyleType,
+} from "./types";
 
 const SMALL_PHONE = Dimensions.get("window").width <= 375;
 
