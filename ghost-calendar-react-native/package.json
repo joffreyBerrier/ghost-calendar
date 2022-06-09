@@ -1,10 +1,10 @@
 {
   "name": "ghost-react-native",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "main": "index.ts",
   "dependencies": {
     "expo-haptics": "~11.2.0",
-    "ghost-calendar": "1.0.3",
+    "ghost-calendar": "1.0.5",
     "react": "17.0.2",
     "react-native": "0.68.2",
     "tailwind-rn": "^4.2.0"
