@@ -1,4 +1,5 @@
 import { View, ScrollView, Text, ActivityIndicator } from "react-native";
+import { DayType, LocaleType, Period } from "ghost-calendar";
 
 import { useStyle } from "../hooks/useStyle";
 
@@ -7,11 +8,6 @@ import { useCalendar } from "../hooks/useCalendar";
 import { Days } from "./Days";
 import { Separator } from "./Separator";
 import { Week } from "./Week";
-import {
-  DayType,
-  LocaleType,
-  Period,
-} from "../../ghost-calendar/core/helpers/types";
 
 type CalendarComponentType = {
   bookingDayHandler: (day: DayType) => void;

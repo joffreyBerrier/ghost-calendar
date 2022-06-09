@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { View } from "react-native";
-import { DayType } from "../../ghost-calendar/core/helpers/types";
+import { DayType } from "ghost-calendar";
 
 import { style } from "./style";
 

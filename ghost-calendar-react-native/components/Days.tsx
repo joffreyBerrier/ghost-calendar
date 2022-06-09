@@ -1,5 +1,6 @@
 import { memo, useMemo } from "react";
 import { View, Text, Pressable, Image } from "react-native";
+import { DayType } from "ghost-calendar";
 import * as Haptics from "expo-haptics";
 
 import { useStyle } from "../hooks/useStyle";
@@ -18,7 +19,6 @@ import {
   style as calendarStyle,
 } from "./style";
 import { CheckIn, CheckOut, CheckInCheckOut } from "./PeriodDelimiter";
-import { DayType } from "../../ghost-calendar/core/helpers/types";
 
 type DayComponentType = {
   bookingDayHandler: (day: DayType) => void;

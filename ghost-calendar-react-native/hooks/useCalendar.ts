@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
 
-import Calendar from "../../ghost-calendar/core/Calendar";
 import {
+  Calendar,
   CalendarPresenter,
   CalendarVM,
-} from "../../ghost-calendar/core/CalendarPresenter";
-import {
   DayType,
   LocaleType,
   Period,
-} from "../../ghost-calendar/core/helpers/types";
+} from "ghost-calendar";
 
 type CalendarProps = {
   locale: LocaleType;

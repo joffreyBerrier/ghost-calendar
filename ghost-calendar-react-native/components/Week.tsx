@@ -1,10 +1,10 @@
 import { memo } from "react";
 import { View, Text } from "react-native";
+import { LocaleType } from "ghost-calendar";
 
 import { useStyle } from "../hooks/useStyle";
 
 import { style as customStyle } from "./style";
-import { LocaleType } from "../../ghost-calendar/core/helpers/types";
 
 const getWeekName = (locale?: LocaleType) => [
   { id: 1, name: locale === "fr" ? "Lun" : "Mo" },

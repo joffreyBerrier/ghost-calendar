@@ -1,4 +1,4 @@
-import { Period } from "../../../ghost-calendar/core/helpers/types";
+import { Period } from "ghost-calendar";
 
 export const rangeDates: Required<Period>[] = [
   {
