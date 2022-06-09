@@ -1,10 +1,7 @@
 {
   "name": "ghost-calendar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "index.ts",
-  "scripts": {
-    "test": "jest"
-  },
   "author": "Joffrey Berrier x Ludovic Elice",
   "license": "ISC",
   "description": "",
