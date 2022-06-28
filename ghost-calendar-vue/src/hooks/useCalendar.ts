@@ -18,10 +18,18 @@ export const useCalendar = ({
   rangeDates,
   checkIn,
   checkOut,
+  visualMonth,
 }: CalendarProps) => {
   const calendarState = ref<CalendarVM | null>(null);
   const presenter = new CalendarPresenter(locale);
-  const calendar = new Calendar(nbMonths + 1, rangeDates, checkIn, checkOut);
+
+  const calendar = new Calendar({
+    nbMonths,
+    rangeDates,
+    checkIn,
+    checkOut,
+    visualMonth,
+  });
 
   calendar.build(presenter);
 
@@ -40,6 +48,14 @@ export const useCalendar = ({
     }
   };
 
+  const setPaginate = (operator: string) => {
+    calendar.setPaginate(presenter, operator);
+
+    presenter.subscribeVM((calendar) => {
+      calendarState.value = { ...calendar };
+    });
+  };
+
   presenter.subscribeVM((calendar) => {
     calendarState.value = { ...calendar };
   });
@@ -47,5 +63,6 @@ export const useCalendar = ({
   return {
     calendar: calendarState,
     setPeriod,
+    setPaginate,
   };
 };

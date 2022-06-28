@@ -1,39 +1,13 @@
 <script lang="ts">
 export default {
-  name: "CalendarHeader",
+  name: "CalendarPaginate",
 };
 </script>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import type { ComputedRef, PropType } from "vue";
-
-import type { MonthType } from "ghost-calendar";
-
 import BaseIcon from "./BaseIcon.vue";
 
 const emit = defineEmits(["paginate"]);
-const props = defineProps({
-  activeIndex: {
-    type: Number,
-    default: 0,
-  },
-  months: {
-    type: Array as PropType<MonthType[]>,
-    default: () => {
-      return [];
-    },
-  },
-});
-
-const prevMonth: ComputedRef<string> = computed(() => {
-  return props.months[props.activeIndex].monthName;
-});
-
-const nextMonth: ComputedRef<string> = computed(() => {
-  return props.months[props.activeIndex + 1].monthName;
-});
-
 const paginate = (operator: string) => {
   emit("paginate", operator);
 };
@@ -44,20 +18,15 @@ const paginate = (operator: string) => {
     <button
       type="button"
       data-testid="button-prev-month"
-      :disabled="activeIndex === 0"
       class="calendar_header-left-button"
       @click="paginate('-')"
     >
       <BaseIcon name="chevronLeft" />
     </button>
 
-    <p class="calendar_header-text">{{ prevMonth }}</p>
-    <p class="calendar_header-text">{{ nextMonth }}</p>
-
     <button
       type="button"
       data-testid="button-next-month"
-      :disabled="activeIndex >= months.length - 2"
       class="calendar_header-right-button"
       @click="paginate('+')"
     >
@@ -69,9 +38,6 @@ const paginate = (operator: string) => {
 <style>
 .calendar_header {
   @apply relative grid grid-cols-2 items-center gap-4;
-}
-.calendar_header-text {
-  @apply text-center py-2 font-bold;
 }
 .calendar_header-left-button,
 .calendar_header-right-button {

@@ -5,10 +5,12 @@ import { getBookingDates } from "./helpers/utils";
 import { LocaleType, MonthType, Period } from "./helpers/types";
 
 export class CalendarVM {
-  months: MonthType[] = [];
-  startDate = "";
   endDate = "";
+  months: MonthType[] = [];
   rangeDates: Required<Period>[] = [];
+  startDate = "";
+  visualMonth: number = 2;
+  activeIndex: number = 0;
 }
 
 export class CalendarPresenter extends Presenter<CalendarVM> {
@@ -43,7 +45,13 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     for (let d = 0; d < this.dates.length; d++) {
       const currentDate = this.dates[d];
       this.vm.months.push(
-        new Month(currentDate, period, this.vm.rangeDates, checkIn, checkOut)
+        new Month({
+          date: currentDate,
+          period,
+          rangeDates: this.vm.rangeDates,
+          checkIn,
+          checkOut,
+        })
           .getMonthKey()
           .getMonthName(this.locale)
           .getMonthYearKey()
@@ -51,6 +59,23 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
           .getMonth()
           .build()
       );
+    }
+
+    if (this.vm.visualMonth) {
+      this.vm.months = this.vm.months.slice(
+        this.vm.activeIndex,
+        this.vm.visualMonth + this.vm.activeIndex
+      );
+    }
+  }
+
+  setActiveIndex(operator: string, checkIn?: Date, checkOut?: Date) {
+    if (operator === "+") {
+      this.vm.activeIndex += 1;
+      this.generateMonths({}, checkIn, checkOut);
+    } else if (operator === "-") {
+      this.vm.activeIndex -= 1;
+      this.generateMonths({}, checkIn, checkOut);
     }
   }
 
@@ -75,7 +100,7 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
   displayStartDate(day: string) {
     this.vm.startDate = day;
     this.vm.endDate = "";
-    this.displayCalendar({ startDate: day, endDate: "" });
+    this.displayCalendar({ period: { startDate: day, endDate: "" } });
     this.notifyVM();
   }
 
@@ -86,14 +111,30 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     if (this.vm.startDate === this.vm.endDate) {
       this.displayInitializePeriod();
     } else if (getBookingDates(this, startDayState, day).length === 0) {
-      this.displayCalendar({ startDate: startDayState, endDate: day });
+      this.displayCalendar({
+        period: { startDate: startDayState, endDate: day },
+      });
     } else {
       this.displayInitializePeriod();
     }
     this.notifyVM();
   }
 
-  displayCalendar(period?: Period, checkIn?: Date, checkOut?: Date) {
+  displayCalendar({
+    period,
+    checkIn,
+    checkOut,
+    visualMonth,
+  }: {
+    period?: Period;
+    checkIn?: Date;
+    checkOut?: Date;
+    visualMonth?: number;
+  }) {
+    if (visualMonth) {
+      this.vm.visualMonth = visualMonth;
+    }
+
     this.generateMonths(period, checkIn, checkOut);
   }
 }

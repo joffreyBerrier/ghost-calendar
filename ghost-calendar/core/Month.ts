@@ -15,11 +15,13 @@ export default class Month {
   private month: MonthType = { days: [] };
 
   constructor(
-    private date: Date,
-    private period?: Period,
-    private rangeDates?: Required<Period>[],
-    private checkIn?: Date,
-    private checkOut?: Date
+    private props: {
+      date: Date;
+      period?: Period;
+      rangeDates?: Required<Period>[];
+      checkIn?: Date;
+      checkOut?: Date;
+    }
   ) {}
 
   private pushDayInMonth(day: Date, currentDate: Date) {
@@ -30,16 +32,20 @@ export default class Month {
         new Day(day)
           .getDate()
           .getDayNumber()
-          .isBooking(this.rangeDates)
+          .isBooking(this.props.rangeDates)
           .isCurrentDay(currentDate)
           .isPast(currentDate)
-          .isStartDate(this.period?.startDate)
-          .isEndDate(this.period?.endDate)
-          .setBookingType(this.rangeDates)
-          .setBookingMarker(this.period, this.checkIn, this.checkOut)
-          .setCheckInOutTimes(this.rangeDates)
-          .setPeriod(this.rangeDates)
-          .isCheckInCheckOut(this.checkIn, this.checkOut)
+          .isStartDate(this.props.period?.startDate)
+          .isEndDate(this.props.period?.endDate)
+          .setBookingType(this.props.rangeDates)
+          .setBookingMarker(
+            this.props.period,
+            this.props.checkIn,
+            this.props.checkOut
+          )
+          .setCheckInOutTimes(this.props.rangeDates)
+          .setPeriod(this.props.rangeDates)
+          .isCheckInCheckOut(this.props.checkIn, this.props.checkOut)
           .build()
       );
     } else {
@@ -55,26 +61,29 @@ export default class Month {
 
   getMonthKey() {
     this.month = { days: [] };
-    this.month.monthKey = this.date.getMonth();
+    this.month.monthKey = this.props.date.getMonth();
 
     return this;
   }
 
   getMonthName(locale: LocaleType) {
-    this.month.monthName = getMonthName(getFirstDayOfMonth(this.date), locale);
+    this.month.monthName = getMonthName(
+      getFirstDayOfMonth(this.props.date),
+      locale
+    );
 
     return this;
   }
 
   getMonthYearKey() {
-    this.month.yearKey = this.date.getFullYear();
+    this.month.yearKey = this.props.date.getFullYear();
 
     return this;
   }
 
   getMonth() {
     const firstDay = getFirstDayOfFirstWeekOfMonth(
-      this.date,
+      this.props.date,
       FIRST_DAY_OF_WEEK
     );
     const currentDate = new Date();

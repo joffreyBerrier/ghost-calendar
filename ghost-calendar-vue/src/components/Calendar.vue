@@ -6,19 +6,20 @@ import { rangeDates } from "./inMemory/rangeDates";
 
 import BaseIcon from "./BaseIcon.vue";
 import CalendarDays from "./CalendarDays.vue";
-import CalendarHeader from "./CalendarHeader.vue";
+import CalendarPaginate from "./CalendarPaginate.vue";
 import CalendarInput from "./CalendarInput.vue";
 import Days from "./Days.vue";
 
 const showCalendar = ref(true);
 const showYear = ref(false);
 const currentYear = ref(new Date());
-const { calendar, setPeriod } = useCalendar({
+const { calendar, setPeriod, setPaginate } = useCalendar({
   locale: "fr",
-  nbMonths: 1,
+  nbMonths: 12,
   rangeDates,
   checkIn: new Date("2022-07-01"),
   checkOut: new Date("2022-07-10"),
+  visualMonth: 2,
 });
 
 // calendar with sliced 2 month + active index lié au checkin checkOut
@@ -30,7 +31,7 @@ const openCalendar = () => {
   console.log("openCalendar");
 };
 const paginate = (operator: string) => {
-  console.log("paginate", operator);
+  setPaginate(operator);
 };
 </script>
 
@@ -67,16 +68,15 @@ const paginate = (operator: string) => {
       v-if="showCalendar"
       :class="['calendar_wrapper', { 'calendar_wrapper--year': showYear }]"
     >
-      <CalendarHeader
-        :active-index="calendar.nbMonths"
-        :months="calendar?.months"
-        @paginate="paginate"
-      />
+      <CalendarPaginate @paginate="paginate" />
 
       <div class="calendar_wrapper_content">
         <div v-for="month in calendar?.months" :key="month.monthKey">
-          <CalendarDays />
+          <p class="calendar_header-text">
+            {{ month.monthName }}
+          </p>
 
+          <CalendarDays />
           <div class="calendar_wrapper_content-days">
             <Days :days="month.days" @setPeriod="setPeriod" />
           </div>
@@ -250,8 +250,7 @@ body {
 .calendar_day--booking {
   background: orange;
 }
-
-.test {
-  background: olive;
+.calendar_header-text {
+  @apply text-center py-2 font-bold;
 }
 </style>

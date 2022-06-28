@@ -8,10 +8,14 @@ import { DayType, Period } from "./helpers/types";
 
 export default class Calendar {
   constructor(
-    private max: number,
-    private rangeDates: Required<Period>[],
-    private checkIn?: Date,
-    private checkOut?: Date
+    private props: {
+      checkIn?: Date;
+      checkOut?: Date;
+      nbMonths: number;
+      paginateIndex: number;
+      rangeDates: Required<Period>[];
+      visualMonth: number;
+    }
   ) {}
 
   setPeriod(
@@ -42,16 +46,25 @@ export default class Calendar {
     }
   }
 
+  setPaginate(presenter: CalendarPresenter, operator: string) {
+    presenter.setActiveIndex(operator, this.props.checkIn, this.props.checkOut);
+  }
+
   build(presenter: CalendarPresenter) {
-    if (this.checkIn && this.checkOut) {
+    if (this.props.checkIn && this.props.checkOut) {
       presenter.displayEndDate(
-        dayFormatter(this.checkOut, "yyyy-MM-dd"),
-        dayFormatter(this.checkIn, "yyyy-MM-dd")
+        dayFormatter(this.props.checkOut, "yyyy-MM-dd"),
+        dayFormatter(this.props.checkIn, "yyyy-MM-dd")
       );
     }
 
-    presenter.displayMonthRange(this.max);
-    presenter.displayRangeDates(this.rangeDates);
-    presenter.displayCalendar([], this.checkIn, this.checkOut);
+    presenter.displayMonthRange(this.props.nbMonths);
+    presenter.displayRangeDates(this.props.rangeDates);
+    presenter.displayCalendar({
+      period: {},
+      checkIn: this.props.checkIn,
+      checkOut: this.props.checkOut,
+      visualMonth: this.props.visualMonth,
+    });
   }
 }
