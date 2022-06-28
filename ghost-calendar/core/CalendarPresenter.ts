@@ -1,14 +1,14 @@
 import Month from "./Month";
 import Presenter from "./Presenter";
 
-import { getBookingDates } from "./helpers/utils";
+import { getBookingDates, getMonthDiff } from "./helpers/utils";
 import { LocaleType, MonthType, Period } from "./helpers/types";
 
 export class CalendarVM {
-  endDate = "";
+  checkOut = "";
   months: MonthType[] = [];
   rangeDates: Required<Period>[] = [];
-  startDate = "";
+  checkIn = "";
   visualMonth: number = 2;
   activeIndex: number = 0;
 }
@@ -39,7 +39,11 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     );
   }
 
-  private generateMonths(period?: Period, checkIn?: Date, checkOut?: Date) {
+  private generateMonths(props: {
+    period?: Period;
+    checkIn?: Date;
+    checkOut?: Date;
+  }) {
     this.vm.months = [];
 
     for (let d = 0; d < this.dates.length; d++) {
@@ -47,10 +51,10 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
       this.vm.months.push(
         new Month({
           date: currentDate,
-          period,
+          period: props.period,
           rangeDates: this.vm.rangeDates,
-          checkIn,
-          checkOut,
+          checkIn: props.checkIn,
+          checkOut: props.checkOut,
         })
           .getMonthKey()
           .getMonthName(this.locale)
@@ -69,13 +73,24 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     }
   }
 
-  setActiveIndex(operator: string, checkIn?: Date, checkOut?: Date) {
+  setActiveIndex(checkIn: Date, checkOut: Date) {
+    if (checkIn && checkOut) {
+      const startDate = new Date();
+      const startIndex = getMonthDiff(startDate, checkIn);
+
+      this.vm.activeIndex = startIndex;
+    } else {
+      this.vm.activeIndex = 0;
+    }
+  }
+
+  paginate(operator: string, checkIn?: Date, checkOut?: Date) {
     if (operator === "+") {
       this.vm.activeIndex += 1;
-      this.generateMonths({}, checkIn, checkOut);
+      this.generateMonths({ period: {}, checkIn, checkOut });
     } else if (operator === "-") {
       this.vm.activeIndex -= 1;
-      this.generateMonths({}, checkIn, checkOut);
+      this.generateMonths({ period: {}, checkIn, checkOut });
     }
   }
 
@@ -93,22 +108,22 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
   }
 
   displayInitializePeriod() {
-    this.vm.startDate = "";
-    this.vm.endDate = "";
+    this.vm.checkIn = "";
+    this.vm.checkOut = "";
   }
 
   displayStartDate(day: string) {
-    this.vm.startDate = day;
-    this.vm.endDate = "";
+    this.vm.checkIn = day;
+    this.vm.checkOut = "";
     this.displayCalendar({ period: { startDate: day, endDate: "" } });
     this.notifyVM();
   }
 
   displayEndDate(day: string, startDayState: string) {
-    this.vm.startDate = startDayState;
-    this.vm.endDate = day;
+    this.vm.checkIn = startDayState;
+    this.vm.checkOut = day;
 
-    if (this.vm.startDate === this.vm.endDate) {
+    if (this.vm.checkIn === this.vm.checkOut) {
       this.displayInitializePeriod();
     } else if (getBookingDates(this, startDayState, day).length === 0) {
       this.displayCalendar({
@@ -130,11 +145,13 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     checkIn?: Date;
     checkOut?: Date;
     visualMonth?: number;
+    startDate: Date;
+    endDate: Date;
   }) {
     if (visualMonth) {
       this.vm.visualMonth = visualMonth;
     }
 
-    this.generateMonths(period, checkIn, checkOut);
+    this.generateMonths({ period, checkIn, checkOut });
   }
 }

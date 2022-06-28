@@ -38,8 +38,8 @@ export const useCalendar = ({
       calendar.setPeriod(
         presenter,
         day,
-        calendarState.value.startDate,
-        calendarState.value.endDate
+        calendarState.value.checkIn,
+        calendarState.value.checkOut
       );
 
       presenter.subscribeVM((calendar) => {
@@ -49,7 +49,7 @@ export const useCalendar = ({
   };
 
   const setPaginate = (operator: string) => {
-    calendar.setPaginate(presenter, operator);
+    calendar.paginate(presenter, operator);
 
     presenter.subscribeVM((calendar) => {
       calendarState.value = { ...calendar };

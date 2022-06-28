@@ -32,8 +32,8 @@ export const useCalendar = ({
       calendar.setPeriod(
         presenter,
         day,
-        calendarState.startDate,
-        calendarState.endDate
+        calendarState.checkIn,
+        calendarState.checkOut
       );
 
       presenter.subscribeVM((calendar) => {

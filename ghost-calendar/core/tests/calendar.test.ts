@@ -48,7 +48,7 @@ describe("Calendar", () => {
     );
 
     presenter.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("");
+      expect(vm.checkIn).toBe("");
     });
   });
 
@@ -66,7 +66,7 @@ describe("Calendar", () => {
     );
 
     presenter.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("");
+      expect(vm.checkIn).toBe("");
     });
   });
 
@@ -84,7 +84,7 @@ describe("Calendar", () => {
     );
 
     presenter.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("");
+      expect(vm.checkIn).toBe("");
     });
   });
 
@@ -108,7 +108,7 @@ describe("Calendar", () => {
     );
 
     presenterT.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("2022-11-22");
+      expect(vm.checkIn).toBe("2022-11-22");
     });
   });
 
@@ -127,7 +127,7 @@ describe("Calendar", () => {
     );
 
     presenterB.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("2022-11-21");
+      expect(vm.checkIn).toBe("2022-11-21");
     });
   });
 
@@ -146,7 +146,7 @@ describe("Calendar", () => {
     );
 
     presenterC.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("2022-11-22");
+      expect(vm.checkIn).toBe("2022-11-22");
     });
   });
 
@@ -165,8 +165,8 @@ describe("Calendar", () => {
     );
 
     presenterD.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("2022-11-22");
-      expect(vm.endDate).toBe("2022-11-24");
+      expect(vm.checkIn).toBe("2022-11-22");
+      expect(vm.checkOut).toBe("2022-11-24");
     });
   });
 
@@ -198,8 +198,8 @@ describe("Calendar", () => {
     );
 
     presenterE.subscribeVM((vm) => {
-      expect(vm.startDate).toBe("2022-11-24");
-      expect(vm.endDate).toBe("2022-11-24");
+      expect(vm.checkIn).toBe("2022-11-24");
+      expect(vm.checkOut).toBe("2022-11-24");
     });
   });
 });

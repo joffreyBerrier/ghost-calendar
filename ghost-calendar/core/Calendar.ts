@@ -1,3 +1,4 @@
+import { getMonthDiff } from "./helpers/utils";
 import { notifyIfPeriodIsUncompleted } from "./helpers/notifiers";
 
 import { CalendarPresenter } from "./CalendarPresenter";
@@ -9,9 +10,10 @@ import { DayType, Period } from "./helpers/types";
 export default class Calendar {
   constructor(
     private props: {
+      startDate: Date;
+      endDate: Date;
       checkIn?: Date;
       checkOut?: Date;
-      nbMonths: number;
       paginateIndex: number;
       rangeDates: Required<Period>[];
       visualMonth: number;
@@ -46,25 +48,55 @@ export default class Calendar {
     }
   }
 
-  setPaginate(presenter: CalendarPresenter, operator: string) {
-    presenter.setActiveIndex(operator, this.props.checkIn, this.props.checkOut);
+  paginate(presenter: CalendarPresenter, operator: string) {
+    presenter.paginate(operator, this.props.checkIn, this.props.checkOut);
   }
 
-  build(presenter: CalendarPresenter) {
+  private setActiveIndex(presenter: CalendarPresenter) {
+    presenter.setActiveIndex(this.props.checkIn, this.props.checkOut);
+  }
+
+  private setStartDateAndEndDate() {
+    if (!this.props.startDate) {
+      this.props.startDate = new Date();
+    }
+    if (!this.props.endDate) {
+      this.props.endDate = new Date(new Date().getFullYear() + 2, 0, 1);
+    }
+  }
+
+  private setCheckInCheckOut(presenter) {
     if (this.props.checkIn && this.props.checkOut) {
       presenter.displayEndDate(
         dayFormatter(this.props.checkOut, "yyyy-MM-dd"),
         dayFormatter(this.props.checkIn, "yyyy-MM-dd")
       );
-    }
 
-    presenter.displayMonthRange(this.props.nbMonths);
+      this.setActiveIndex(presenter);
+    }
+  }
+
+  private setNbMonth(presenter) {
+    const nbMonths: number = getMonthDiff(
+      this.props.startDate,
+      this.props.endDate
+    );
+    presenter.displayMonthRange(nbMonths);
+  }
+
+  build(presenter: CalendarPresenter) {
+    this.setStartDateAndEndDate();
+    this.setCheckInCheckOut(presenter);
+    this.setNbMonth(presenter);
+
     presenter.displayRangeDates(this.props.rangeDates);
     presenter.displayCalendar({
       period: {},
       checkIn: this.props.checkIn,
       checkOut: this.props.checkOut,
       visualMonth: this.props.visualMonth,
+      startDate: this.props.startDate,
+      endDate: this.props.endDate,
     });
   }
 }

@@ -15,10 +15,11 @@ const showYear = ref(false);
 const currentYear = ref(new Date());
 const { calendar, setPeriod, setPaginate } = useCalendar({
   locale: "fr",
-  nbMonths: 12,
   rangeDates,
-  checkIn: new Date("2022-07-01"),
-  checkOut: new Date("2022-07-10"),
+  startDate: new Date(),
+  endDate: new Date(new Date().getFullYear() + 2, 0, 1),
+  checkIn: new Date("2022-09-01"),
+  checkOut: new Date("2022-09-10"),
   visualMonth: 2,
 });
 
