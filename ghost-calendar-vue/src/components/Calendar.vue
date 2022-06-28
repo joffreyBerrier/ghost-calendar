@@ -1,122 +1,78 @@
 <script setup lang="ts">
+import { ref } from "vue";
+
 import { useCalendar } from "../hooks/useCalendar";
 import { rangeDates } from "./inMemory/rangeDates";
 
+import BaseIcon from "./BaseIcon.vue";
+import CalendarDays from "./CalendarDays.vue";
+import CalendarHeader from "./CalendarHeader.vue";
+import CalendarInput from "./CalendarInput.vue";
+import Days from "./Days.vue";
+
+const showCalendar = ref(true);
+const showYear = ref(false);
+const currentYear = ref(new Date());
 const { calendar, setPeriod } = useCalendar({
   locale: "fr",
-  nbMonths: 2,
+  nbMonths: 1,
   rangeDates,
 });
 
-console.log(setPeriod);
-// defineProps<{
-//   msg: string;
-// }>();
+const openCalendar = () => {
+  console.log("openCalendar");
+};
+const paginate = (operator: string) => {
+  console.log("paginate", operator);
+};
 </script>
 
 <template>
-  <div class="calendar_wrapper_content">
-    <div v-for="month in calendar?.months" :key="month.monthKey">
-      <span class="font-bold">{{ month.monthName }}</span>
-      <div class="calendar_wrapper_content-days">
-        <div
-          v-for="day in month.days"
-          :key="day.day"
-          :class="[
-            'calendar_day-wrap',
-            // Color date
-            day.bookingType ? `calendar_day--${day.bookingType}` : '',
-            {
-              'calendar_day-wrap--no-border': !day,
-              'calendar_day-wrap--disabled': day.isBooking,
-            },
-          ]"
-          :data-testid="`daywrap-${day.day}`"
-        >
-          <!-- Add disabledDay -->
-          <!-- @mouseenter="dayMouseOver(day)"
-          @mouseleave="dayMouseLeave" -->
-          <!-- <div v-if="day" class="calendar_tooltip"></div> -->
+  <div ref="calendarRef" class="calendar">
+    <CalendarInput
+      :placeholder="{ checkIn: 'Arrivée', checkOut: 'Départ' }"
+      :check-in="calendar.startDate"
+      :check-out="calendar.endDate"
+      @open-calendar="openCalendar"
+    />
 
-          <button
-            v-if="day.day"
-            type="button"
-            :class="[
-              // Basic style
-              'calendar_day z-10',
-              // Today
-              {
-                'calendar_day--today': day.isCurrentDay,
-              },
-              // CheckIn or CheckOut
-              {
-                'calendar_day--checkIn-checkOut':
-                  day.period?.checkIn === day.day ||
-                  day.period?.checkOut === day.day,
-              },
-              // Booking date
-              {
-                'calendar_day--booking':
-                  day.isStartDate || day.isEndDate || day.isBooking,
-              },
-              // Disabled date
-              //{
-              //'calendar_day--disabled': inDisabledDay(day),
-              //},
-              // Hovering date
-              //{
-              //'calendar_day--hovering':
-              // (!checkIn &&
-              //   checkIn !== day.date &&
-              //   hoveringDay === day.date) ||
-              // hoveringDates.includes(day.formatDay),
-              //},
-              //{
-              //'calendar_day_between--checkIn-checkOut':
-              //datesBetweenCheckInCheckOutDates.includes(day.formatDay),
-              //},
-              //{
-              //  'calendar_day--hovering-checkIn':
-              //    checkIn && hoveringDay === day.date,
-              //},
-              // Inactive saturday period
-              //{
-              //  'calendar_day--in-period':
-              //    inWeeklyPeriods(day) || inNextPeriodDisabledDates(day),
-              //},
-              // CheckIn saturday / sunday period
-              //{
-              //  'calendar_day--in-period-checkIn':
-              //    inWeeklyPeriodsCheckin(day) || inNightlyPeriod(day),
-              //},
-            ]"
-            :data-testid="`day-${day.day}`"
-            @click="setPeriod(day)"
-          >
-            <!-- <i
-              v-if="
-                isInCheckoutHalfDay(day) ||
-                isInCheckinHalfDayAndCheckin(day) ||
-                isInCheckinHalfDayAndNotCheckin(day)
-              "
-              :style="{ background: bookingStyle[day.formatDay] }"
-              :class="[
-                'calendar_day_haldDay',
-                {
-                  'calendar_day_haldDay--checkIn':
-                    isInCheckinHalfDayAndCheckin(day) ||
-                    isInCheckinHalfDayAndNotCheckin(day),
-                  'calendar_day_haldDay--checkOut': isInCheckoutHalfDay(day),
-                },
-              ]"
-            /> -->
+    <div v-if="showYear" class="calendar_paginate-wrapper">
+      <button
+        data-testid="calendar_paginate-prev--button"
+        type="button"
+        class="calendar_paginate-button"
+        @click="paginate('-')"
+      >
+        <BaseIcon name="chevronLeft" />
+      </button>
+      <span class="calendar_paginate-year">{{ currentYear }}</span>
+      <button
+        data-testid="calendar_paginate-next--button"
+        type="button"
+        class="calendar_paginate-button"
+        @click="paginate('+')"
+      >
+        <BaseIcon name="chevronRight" />
+      </button>
+    </div>
 
-            <span class="calendar_day--day-number">
-              {{ day.dayNumber }}
-              {{ day }}
-            </span>
-          </button>
-          <span v-else></span>
+    <div
+      v-if="showCalendar"
+      :class="['calendar_wrapper', { 'calendar_wrapper--year': showYear }]"
+    >
+      <CalendarHeader
+        :active-index="calendar.nbMonths"
+        :months="calendar?.months"
+        @paginate="paginate"
+      />
+
+      <div class="calendar_wrapper_content">
+        <div v-for="month in calendar?.months" :key="month.monthKey">
+          <CalendarDays />
+
+          <div class="calendar_wrapper_content-days">
+            <Days :days="month.days" @setPeriod="setPeriod" />
+          </div>
         </div>
       </div>
     </div>
@@ -201,7 +157,7 @@ body {
 }
 .calendar_day--checkIn-checkOut,
 .calendar_day--checkIn-checkOut.calendar_day--hovering {
-  background-color: var(--day-checkIn-checkOut);
+  background: red;
 }
 .calendar_day--disabled {
   background-color: var(--day-disabled);
@@ -273,5 +229,22 @@ body {
 .calendar_day_haldDay--checkOut {
   top: -140%;
   right: 0;
+}
+
+.calendar_day--startDate {
+  background: red;
+}
+.calendar_day--endDate {
+  background: red;
+}
+.calendar_day--checkInCheckOut {
+  background: blue;
+}
+.calendar_day--booking {
+  background: orange;
+}
+
+.test {
+  background: olive;
 }
 </style>
