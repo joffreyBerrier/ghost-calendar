@@ -37,13 +37,13 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     );
   }
 
-  private generateMonths(period?: Period) {
+  private generateMonths(period?: Period, checkIn?: Date, checkOut?: Date) {
     this.vm.months = [];
 
     for (let d = 0; d < this.dates.length; d++) {
       const currentDate = this.dates[d];
       this.vm.months.push(
-        new Month(currentDate, period, this.vm.rangeDates)
+        new Month(currentDate, period, this.vm.rangeDates, checkIn, checkOut)
           .getMonthKey()
           .getMonthName(this.locale)
           .getMonthYearKey()
@@ -74,7 +74,8 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
 
   displayStartDate(day: string) {
     this.vm.startDate = day;
-    this.displayCalendar({ startDate: day });
+    this.vm.endDate = "";
+    this.displayCalendar({ startDate: day, endDate: "" });
     this.notifyVM();
   }
 
@@ -92,7 +93,7 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     this.notifyVM();
   }
 
-  displayCalendar(period?: Period) {
-    this.generateMonths(period);
+  displayCalendar(period?: Period, checkIn?: Date, checkOut?: Date) {
+    this.generateMonths(period, checkIn, checkOut);
   }
 }

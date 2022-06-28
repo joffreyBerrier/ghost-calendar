@@ -1,10 +1,18 @@
 import { notifyIfPeriodIsUncompleted } from "./helpers/notifiers";
 
 import { CalendarPresenter } from "./CalendarPresenter";
+
+import { dayFormatter } from "./helpers/date";
+
 import { DayType, Period } from "./helpers/types";
 
 export default class Calendar {
-  constructor(private max: number, private rangeDates: Required<Period>[]) {}
+  constructor(
+    private max: number,
+    private rangeDates: Required<Period>[],
+    private checkIn?: Date,
+    private checkOut?: Date
+  ) {}
 
   setPeriod(
     presenter: CalendarPresenter,
@@ -35,8 +43,15 @@ export default class Calendar {
   }
 
   build(presenter: CalendarPresenter) {
+    if (this.checkIn && this.checkOut) {
+      presenter.displayEndDate(
+        dayFormatter(this.checkOut, "yyyy-MM-dd"),
+        dayFormatter(this.checkIn, "yyyy-MM-dd")
+      );
+    }
+
     presenter.displayMonthRange(this.max);
     presenter.displayRangeDates(this.rangeDates);
-    presenter.displayCalendar();
+    presenter.displayCalendar([], this.checkIn, this.checkOut);
   }
 }

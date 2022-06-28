@@ -17,7 +17,14 @@ const { calendar, setPeriod } = useCalendar({
   locale: "fr",
   nbMonths: 1,
   rangeDates,
+  checkIn: new Date("2022-07-01"),
+  checkOut: new Date("2022-07-10"),
 });
+
+// calendar with sliced 2 month + active index lié au checkin checkOut
+// calendar with sliced 2 month + active index lié à la date du jour car pas de checkin
+
+// =>  calendar with all month
 
 const openCalendar = () => {
   console.log("openCalendar");

@@ -38,6 +38,19 @@ export default class Day {
     return this;
   }
 
+  isCheckInCheckOut(checkIn?: Date, checkOut?: Date) {
+    if (checkIn && dayFormatter(checkIn, "yyyy-MM-dd") === this.day.day) {
+      this.day.isStartDate = true;
+    } else if (
+      checkOut &&
+      dayFormatter(checkOut, "yyyy-MM-dd") === this.day.day
+    ) {
+      this.day.isEndDate = true;
+    }
+
+    return this;
+  }
+
   isStartDate(day: string | undefined) {
     if (this.day.day === day) {
       this.day.isStartDate = true;
@@ -54,7 +67,19 @@ export default class Day {
     return this;
   }
 
-  setBookingMarker(period?: Period) {
+  setBookingMarker(period?: Period, checkIn?: Date, checkOut?: Date) {
+    if (
+      checkIn &&
+      checkOut &&
+      checkBetweenDates(
+        dayFormatter(checkIn, "yyyy-MM-dd"),
+        dayFormatter(checkOut, "yyyy-MM-dd"),
+        this.day.day
+      )
+    ) {
+      this.day.isBookingMarker = true;
+    }
+
     if (period?.startDate && period?.endDate) {
       if (checkBetweenDates(period.startDate, period.endDate, this.day.day)) {
         this.day.isBookingMarker = true;

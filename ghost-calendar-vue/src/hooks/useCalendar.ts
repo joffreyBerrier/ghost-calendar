@@ -1,6 +1,6 @@
 import { ref } from "vue";
 
-import { Calendar, CalendarPresenter, CalendarVM } from "ghost-calendar";
+import { Calendar, CalendarPresenter, CalendarVM } from "core";
 
 import type { DayType, LocaleType, Period } from "ghost-calendar";
 
@@ -8,16 +8,20 @@ type CalendarProps = {
   locale: LocaleType;
   nbMonths: number;
   rangeDates: Required<Period>[];
+  checkIn: Date;
+  checkOut: Date;
 };
 
 export const useCalendar = ({
   locale,
   nbMonths,
   rangeDates,
+  checkIn,
+  checkOut,
 }: CalendarProps) => {
   const calendarState = ref<CalendarVM | null>(null);
   const presenter = new CalendarPresenter(locale);
-  const calendar = new Calendar(nbMonths + 1, rangeDates);
+  const calendar = new Calendar(nbMonths + 1, rangeDates, checkIn, checkOut);
 
   calendar.build(presenter);
 
@@ -37,7 +41,7 @@ export const useCalendar = ({
   };
 
   presenter.subscribeVM((calendar) => {
-    calendarState.value = calendar;
+    calendarState.value = { ...calendar };
   });
 
   return {

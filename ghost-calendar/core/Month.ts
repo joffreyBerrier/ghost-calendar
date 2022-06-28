@@ -17,7 +17,9 @@ export default class Month {
   constructor(
     private date: Date,
     private period?: Period,
-    private rangeDates?: Required<Period>[]
+    private rangeDates?: Required<Period>[],
+    private checkIn?: Date,
+    private checkOut?: Date
   ) {}
 
   private pushDayInMonth(day: Date, currentDate: Date) {
@@ -34,9 +36,10 @@ export default class Month {
           .isStartDate(this.period?.startDate)
           .isEndDate(this.period?.endDate)
           .setBookingType(this.rangeDates)
-          .setBookingMarker(this.period)
+          .setBookingMarker(this.period, this.checkIn, this.checkOut)
           .setCheckInOutTimes(this.rangeDates)
           .setPeriod(this.rangeDates)
+          .isCheckInCheckOut(this.checkIn, this.checkOut)
           .build()
       );
     } else {

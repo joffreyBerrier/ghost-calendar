@@ -45,6 +45,7 @@ const setPeriod = (day: DayType) => {
       :class="[
         'calendar_day z-10',
         {
+          'calendar_day--disabled': day.isPastDay,
           'calendar_day--today': day.isCurrentDay,
           'calendar_day--startDate': day.isStartDate,
           'calendar_day--endDate': day.isEndDate,
