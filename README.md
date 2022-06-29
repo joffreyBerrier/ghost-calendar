@@ -43,6 +43,13 @@
   "isCheckOutHalfDay": boolean,
   "isInCheckinHalfDayAndNotCheckin": boolean
 }
+
+```
+
+## Props :
+
+```typescript
+bookingColors = { admin: "#000000" };
 ```
 
 - isDisabled : Day is disabled => In a booking and not a checkOutDay / bookedDates

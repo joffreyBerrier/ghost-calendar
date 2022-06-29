@@ -67,7 +67,15 @@ export default class Day {
     return this;
   }
 
-  setBookingMarker(period?: Period, checkIn?: Date, checkOut?: Date) {
+  isHalfDay() {
+    if (this.day.isStartDate && this.day.isEndDate) {
+      this.day.isHalfDay = true;
+    }
+
+    return this;
+  }
+
+  setRangeDate(period?: Period, checkIn?: Date, checkOut?: Date) {
     if (
       checkIn &&
       checkOut &&
@@ -77,12 +85,12 @@ export default class Day {
         this.day.day
       )
     ) {
-      this.day.isBookingMarker = true;
+      this.day.isRangeDate = true;
     }
 
     if (period?.startDate && period?.endDate) {
       if (checkBetweenDates(period.startDate, period.endDate, this.day.day)) {
-        this.day.isBookingMarker = true;
+        this.day.isRangeDate = true;
       }
     }
 
@@ -110,7 +118,10 @@ export default class Day {
     return this;
   }
 
-  setBookingType(range: Required<Period>[] | undefined) {
+  setBookingType(
+    range: Required<Period>[] | undefined,
+    bookingColors?: Record<string, string>
+  ) {
     if (range) {
       range.forEach((day) => {
         if (day.startDate === this.day.day) {
@@ -119,6 +130,10 @@ export default class Day {
 
         if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
           this.day.bookingType = day.type;
+
+          if (bookingColors) {
+            this.day.bookingColor = bookingColors[day.type] || "#000000";
+          }
         }
 
         if (day.endDate === this.day.day) {
@@ -171,6 +186,6 @@ export default class Day {
   }
 
   build() {
-    return JSON.parse(JSON.stringify(this.day));
+    return { ...this.day };
   }
 }

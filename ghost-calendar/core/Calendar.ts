@@ -1,11 +1,10 @@
 import { getMonthDiff } from "./helpers/utils";
+
+import { dayFormatter } from "./helpers/date";
+import { DayType, Period } from "./helpers/types";
 import { notifyIfPeriodIsUncompleted } from "./helpers/notifiers";
 
 import { CalendarPresenter } from "./CalendarPresenter";
-
-import { dayFormatter } from "./helpers/date";
-
-import { DayType, Period } from "./helpers/types";
 
 export default class Calendar {
   constructor(
@@ -17,6 +16,7 @@ export default class Calendar {
       paginateIndex: number;
       rangeDates: Required<Period>[];
       visualMonth: number;
+      bookingColors: Record<string, string>;
     }
   ) {}
 
@@ -29,7 +29,7 @@ export default class Calendar {
     const canBeStartDate = !day.isStartDate && !day.isBooking && !day.isPastDay;
     const periodIsUncompleted = startDayState && !endDayState;
     const periodIsCompleted = startDayState && endDayState;
-    const isEndDateOrBookingMarker = day.isEndDate || day.isBookingMarker;
+    const isEndDateOrBookingMarker = day.isEndDate || day.isRangeDate;
 
     const date = day.day as string;
 
@@ -53,7 +53,9 @@ export default class Calendar {
   }
 
   private setActiveIndex(presenter: CalendarPresenter) {
-    presenter.setActiveIndex(this.props.checkIn, this.props.checkOut);
+    if (this.props.checkIn && this.props.checkOut) {
+      presenter.setActiveIndex(this.props.checkIn, this.props.checkOut);
+    }
   }
 
   private setStartDateAndEndDate() {
@@ -95,8 +97,7 @@ export default class Calendar {
       checkIn: this.props.checkIn,
       checkOut: this.props.checkOut,
       visualMonth: this.props.visualMonth,
-      startDate: this.props.startDate,
-      endDate: this.props.endDate,
+      bookingColors: this.props.bookingColors,
     });
   }
 }
