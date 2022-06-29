@@ -62,6 +62,7 @@ const dayMouseLeave = () => {
           'calendar_day--hovering': hoveringDates.includes(day.day),
         },
       ]"
+      :style="{ backgroundColor: day.bookingColor }"
       :data-testid="`day-${day.day}`"
       @click="setPeriod(day)"
       @mouseenter="dayMouseOver(day)"

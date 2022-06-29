@@ -11,6 +11,7 @@ export class CalendarVM {
   checkIn = "";
   visualMonth: number = 2;
   activeIndex: number = 0;
+  bookingColors: Record<string, string> = {};
 }
 
 export class CalendarPresenter extends Presenter<CalendarVM> {
@@ -83,10 +84,20 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
   paginate(operator: string, checkIn?: Date, checkOut?: Date) {
     if (operator === "+") {
       this.vm.activeIndex += 1;
-      this.generateMonths({ period: {}, checkIn, checkOut });
+      this.generateMonths({
+        period: {},
+        checkIn,
+        checkOut,
+        bookingColors: this.vm.bookingColors,
+      });
     } else if (operator === "-") {
       this.vm.activeIndex -= 1;
-      this.generateMonths({ period: {}, checkIn, checkOut });
+      this.generateMonths({
+        period: {},
+        checkIn,
+        checkOut,
+        bookingColors: this.vm.bookingColors,
+      });
     }
   }
 
@@ -111,7 +122,10 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
   displayStartDate(day: string) {
     this.vm.checkIn = day;
     this.vm.checkOut = "";
-    this.displayCalendar({ period: { startDate: day, endDate: "" } });
+    this.displayCalendar({
+      period: { startDate: day, endDate: "" },
+      bookingColors: this.vm.bookingColors,
+    });
     this.notifyVM();
   }
 
@@ -124,6 +138,7 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     } else if (getBookingDates(this, startDayState, day).length === 0) {
       this.displayCalendar({
         period: { startDate: startDayState, endDate: day },
+        bookingColors: this.vm.bookingColors,
       });
     } else {
       this.displayInitializePeriod();
@@ -146,6 +161,10 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
   }) {
     if (visualMonth) {
       this.vm.visualMonth = visualMonth;
+    }
+
+    if (bookingColors) {
+      this.vm.bookingColors = bookingColors;
     }
 
     this.generateMonths({ period, checkIn, checkOut, bookingColors });
