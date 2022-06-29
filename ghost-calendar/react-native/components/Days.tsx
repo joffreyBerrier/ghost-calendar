@@ -1,6 +1,6 @@
 import { memo, useMemo } from "react";
 import { View, Text, Pressable, Image } from "react-native";
-import { DayType } from "ghost-calendar";
+import { DayType } from "../../core";
 import * as Haptics from "expo-haptics";
 
 import { useStyle } from "../hooks/useStyle";
@@ -105,7 +105,14 @@ export const Days = memo(
     );
 
     return (
-      <View style={style("flex-row flex-wrap justify-center w-full")}>
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          width: "100%",
+        }}
+      >
         {renderDays}
       </View>
     );

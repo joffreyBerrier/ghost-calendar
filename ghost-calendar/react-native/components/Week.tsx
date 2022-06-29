@@ -1,8 +1,6 @@
 import { memo } from "react";
 import { View, Text } from "react-native";
-import { LocaleType } from "ghost-calendar";
-
-import { useStyle } from "../hooks/useStyle";
+import { LocaleType } from "../../core";
 
 import { style as customStyle } from "./style";
 
@@ -17,13 +15,18 @@ const getWeekName = (locale?: LocaleType) => [
 ];
 
 export const Week = memo(({ locale }: { locale?: LocaleType }) => {
-  const style = useStyle();
-
   return (
-    <View style={style("flex-row flex-wrap justify-center w-full")}>
+    <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        width: "100%",
+      }}
+    >
       {getWeekName(locale).map((week) => (
         <View key={week.id} style={customStyle.day}>
-          <Text style={style("text-gray-400")}>
+          <Text style={{ color: "#aaaaaa" }}>
             {week.name.toLocaleUpperCase()}
           </Text>
         </View>

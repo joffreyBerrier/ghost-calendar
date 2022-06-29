@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-import { DayType, TypeBookingFormatted } from "ghost-calendar";
+import { DayType, TypeBookingFormatted } from "../../core";
 import {
   communStyleType,
   leftBookingStyleType,

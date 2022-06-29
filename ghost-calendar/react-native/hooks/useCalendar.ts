@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 
 import {
+  BookingColorType,
   Calendar,
   CalendarPresenter,
   CalendarVM,
   DayType,
   LocaleType,
   Period,
-} from "ghost-calendar";
+} from "../../core";
 
 type CalendarProps = {
   locale: LocaleType;
@@ -15,9 +16,9 @@ type CalendarProps = {
   endDate: Date;
   checkIn?: Date;
   checkOut?: Date;
-  paginateIndex: number;
   rangeDates: Required<Period>[];
   visualMonth: number;
+  bookingColors: BookingColorType;
 };
 
 export const useCalendar = ({
@@ -26,9 +27,9 @@ export const useCalendar = ({
   endDate,
   checkIn,
   checkOut,
-  paginateIndex,
   rangeDates,
   visualMonth,
+  bookingColors,
 }: CalendarProps) => {
   const [calendarState, setCalendarState] = useState<CalendarVM | null>(null);
 
@@ -38,9 +39,9 @@ export const useCalendar = ({
     endDate,
     checkIn,
     checkOut,
-    paginateIndex,
     rangeDates,
     visualMonth,
+    bookingColors,
   });
 
   calendar.build(presenter);

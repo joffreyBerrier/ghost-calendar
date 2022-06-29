@@ -1,5 +1,5 @@
 import { View, ScrollView, Text, ActivityIndicator } from "react-native";
-import { DayType, LocaleType, Period } from "ghost-calendar";
+import { BookingColorType, DayType, LocaleType, Period } from "../../core";
 
 import { useStyle } from "../hooks/useStyle";
 
@@ -18,9 +18,9 @@ type CalendarComponentType = {
   endDate: Date;
   checkIn?: Date;
   checkOut?: Date;
-  paginateIndex: number;
   rangeDates: Required<Period>[];
   visualMonth: number;
+  bookingColors: BookingColorType;
 };
 
 const CalendarComponent = ({
@@ -31,16 +31,20 @@ const CalendarComponent = ({
   withInteraction,
   startDate,
   endDate,
-  paginateIndex,
   visualMonth,
+  checkIn,
+  checkOut,
+  bookingColors,
 }: CalendarComponentType) => {
   const style = useStyle();
   const { calendar, setPeriod } = useCalendar({
-    locale,
-    startDate,
+    bookingColors,
+    checkIn,
+    checkOut,
     endDate,
+    locale,
     rangeDates,
-    paginateIndex,
+    startDate,
     visualMonth,
   });
 
@@ -60,16 +64,17 @@ const CalendarComponent = ({
   }
 
   return (
-    <View style={style("flex justify-center")}>
+    <View style={{ flexDirection: "row", justifyContent: "center" }}>
       <ScrollView>
         {calendar.months.map((month, idx) => (
           <View key={`${month.id}${idx}`}>
-            <View style={style("mb-8 mt-10 pl-7")}>
-              <Text style={style("font-bold text-base")}>
+            <View style={{ marginBottom: 32, marginTop: 40, paddingLeft: 28 }}>
+              <Text
+                style={{ fontWeight: "bold", fontSize: 16, lineHeight: 24 }}
+              >
                 {month.monthName}
               </Text>
             </View>
-
             <Week locale={locale} />
             <Days
               bookingDayHandler={bookingDayHandler}
@@ -77,6 +82,7 @@ const CalendarComponent = ({
               setPeriod={setPeriod}
               withInteraction={withInteraction}
             />
+
             {idx !== calendar.months.length - 1 && <Separator />}
           </View>
         ))}

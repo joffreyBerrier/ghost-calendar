@@ -13,7 +13,6 @@ export default class Calendar {
       endDate: Date;
       checkIn?: Date;
       checkOut?: Date;
-      paginateIndex: number;
       rangeDates: Required<Period>[];
       visualMonth: number;
       bookingColors: BookingColorType;
@@ -67,7 +66,7 @@ export default class Calendar {
     }
   }
 
-  private setCheckInCheckOut(presenter) {
+  private setCheckInCheckOut(presenter: CalendarPresenter) {
     if (this.props.checkIn && this.props.checkOut) {
       presenter.displayEndDate(
         dayFormatter(this.props.checkOut, "yyyy-MM-dd"),
@@ -78,7 +77,7 @@ export default class Calendar {
     }
   }
 
-  private setNbMonth(presenter) {
+  private setNbMonth(presenter: CalendarPresenter) {
     const nbMonths: number = getMonthDiff(
       this.props.startDate,
       this.props.endDate

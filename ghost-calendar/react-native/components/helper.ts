@@ -1,4 +1,4 @@
-import { DayType } from "ghost-calendar";
+import { DayType } from "../../core";
 
 export const getPreviousDay = (days: DayType[], index: number) => {
   return days[index - 1];

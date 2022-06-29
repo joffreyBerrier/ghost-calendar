@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "ghost-calendar",
+    "slug": "ghost-calendar",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./react-native/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./react-native/assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./react-native/assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./react-native/assets/favicon.png"
+    }
+  }
+}

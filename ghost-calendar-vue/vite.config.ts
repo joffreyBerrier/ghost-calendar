@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      core: fileURLToPath(new URL("../ghost-calendar", import.meta.url)),
+      core: fileURLToPath(new URL("../ghost-calendar/core", import.meta.url)),
     },
   },
 });
