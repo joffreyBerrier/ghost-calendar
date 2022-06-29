@@ -1,7 +1,12 @@
 import Day from "./Day";
 
 import { date } from "./helpers/date";
-import { LocaleType, MonthType, Period } from "./helpers/types";
+import {
+  LocaleType,
+  MonthType,
+  Period,
+  BookingColorType,
+} from "./helpers/types";
 import {
   getMonthName,
   getFirstDayOfMonth,
@@ -21,7 +26,7 @@ export default class Month {
       rangeDates?: Required<Period>[];
       checkIn?: Date;
       checkOut?: Date;
-      bookingColors?: Record<string, string>;
+      bookingColors?: BookingColorType;
     }
   ) {}
 

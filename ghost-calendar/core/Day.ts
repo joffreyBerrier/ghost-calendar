@@ -1,5 +1,5 @@
 import { dayFormatter } from "./helpers/date";
-import { DayType, Period } from "./helpers/types";
+import { DayType, Period, BookingColorType } from "./helpers/types";
 import { checkCurrentDayAndPastDay, checkBetweenDates } from "./helpers/utils";
 
 export default class Day {
@@ -120,24 +120,44 @@ export default class Day {
 
   setBookingType(
     range: Required<Period>[] | undefined,
-    bookingColors?: Record<string, string>
+    bookingColors?: BookingColorType
   ) {
     if (range) {
       range.forEach((day) => {
         if (day.startDate === this.day.day) {
           this.day.bookingType = day.type;
+
+          if (
+            bookingColors &&
+            bookingColors[day.type] &&
+            bookingColors[day.type].startEnd
+          ) {
+            this.day.bookingColor = bookingColors[day.type].startEnd;
+          }
         }
 
         if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
           this.day.bookingType = day.type;
 
-          if (bookingColors) {
-            this.day.bookingColor = bookingColors[day.type] || "#000000";
+          if (
+            bookingColors &&
+            bookingColors[day.type] &&
+            bookingColors[day.type].beetween
+          ) {
+            this.day.bookingColor = bookingColors[day.type].beetween;
           }
         }
 
         if (day.endDate === this.day.day) {
           this.day.bookingType = day.type;
+
+          if (
+            bookingColors &&
+            bookingColors[day.type] &&
+            bookingColors[day.type].startEnd
+          ) {
+            this.day.bookingColor = bookingColors[day.type].startEnd;
+          }
         }
       });
     }

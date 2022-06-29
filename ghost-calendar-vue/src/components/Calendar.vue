@@ -29,6 +29,7 @@ const {
   checkIn: new Date("2022-09-01"),
   checkOut: new Date("2022-09-10"),
   visualMonth: 2,
+  bookingColors: { other: { startEnd: "#00FF00", beetween: "#FF0FF0" } },
 });
 
 const hoveringDates: Ref<string[]> = ref([]);

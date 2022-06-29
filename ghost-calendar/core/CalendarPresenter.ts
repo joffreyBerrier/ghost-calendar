@@ -2,7 +2,12 @@ import Month from "./Month";
 import Presenter from "./Presenter";
 
 import { getBookingDates, getMonthDiff } from "./helpers/utils";
-import { LocaleType, MonthType, Period } from "./helpers/types";
+import {
+  LocaleType,
+  MonthType,
+  Period,
+  BookingColorType,
+} from "./helpers/types";
 
 export class CalendarVM {
   checkOut = "";
@@ -11,7 +16,7 @@ export class CalendarVM {
   checkIn = "";
   visualMonth: number = 2;
   activeIndex: number = 0;
-  bookingColors: Record<string, string> = {};
+  bookingColors: BookingColorType = {};
 }
 
 export class CalendarPresenter extends Presenter<CalendarVM> {
@@ -38,7 +43,7 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     period?: Period;
     checkIn?: Date;
     checkOut?: Date;
-    bookingColors?: Record<string, string>;
+    bookingColors?: BookingColorType;
   }) {
     this.vm.months = [];
 
@@ -157,7 +162,7 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     checkIn?: Date;
     checkOut?: Date;
     visualMonth?: number;
-    bookingColors?: Record<string, string>;
+    bookingColors?: BookingColorType;
   }) {
     if (visualMonth) {
       this.vm.visualMonth = visualMonth;

@@ -2,7 +2,7 @@ import { ref } from "vue";
 
 import { Calendar, CalendarPresenter, CalendarVM } from "core";
 
-import type { DayType, LocaleType, Period } from "ghost-calendar";
+import type { DayType, LocaleType, Period, BookingColorType } from "core";
 
 type CalendarProps = {
   locale: LocaleType;
@@ -11,6 +11,7 @@ type CalendarProps = {
   checkIn: Date;
   checkOut: Date;
   visualMonth: number;
+  bookingColors: BookingColorType;
 };
 
 export const useCalendar = ({
@@ -20,6 +21,7 @@ export const useCalendar = ({
   checkIn,
   checkOut,
   visualMonth,
+  bookingColors,
 }: CalendarProps) => {
   const calendarState = ref<CalendarVM | null>(null);
   const presenter = new CalendarPresenter(locale);
@@ -30,7 +32,7 @@ export const useCalendar = ({
     checkIn,
     checkOut,
     visualMonth,
-    bookingColors: { other: "#000000" },
+    bookingColors,
   });
 
   calendar.build(presenter);

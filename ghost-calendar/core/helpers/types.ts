@@ -34,3 +34,7 @@ export type Period = {
 };
 
 export type LocaleType = "fr" | "en" | undefined;
+
+export type BookingColorType = {
+  [key: string]: { startEnd: string; beetween: string };
+};
