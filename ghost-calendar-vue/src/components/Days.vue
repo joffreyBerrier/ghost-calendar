@@ -1,26 +1,34 @@
 <script setup lang="ts">
 import type { DayType } from "ghost-calendar";
 
-import {
-  getNextDay,
-  getPreviousDay,
-  periodHasCompleted,
-  periodHasNotEnDate,
-  periodHasNotStartDate,
-} from "./helper";
-
 defineProps<{
   days: DayType[];
+  hoveringDates: string[];
 }>();
 
-const emit = defineEmits(["setPeriod", "onBooking"]);
+// const hoveringPeriod: Ref<CurrentPeriod> | Ref<null> = ref(null);
+
+const emit = defineEmits([
+  "setPeriod",
+  "onBooking",
+  "dayMouseOver",
+  "dayMouseLeave",
+]);
 
 const setPeriod = (day: DayType) => {
   if (day.day) {
+    // hoveringDates.value = [];
     if (day.isBooking) emit("onBooking", day);
 
     emit("setPeriod", day);
   }
+};
+
+const dayMouseOver = (day: DayType) => {
+  emit("dayMouseOver", day);
+};
+const dayMouseLeave = () => {
+  emit("dayMouseLeave");
 };
 </script>
 
@@ -51,10 +59,13 @@ const setPeriod = (day: DayType) => {
           'calendar_day--endDate': day.isEndDate,
           'calendar_day--checkInCheckOut': day.isBookingMarker,
           'calendar_day--booking': day.isBooking,
+          'calendar_day--hovering': hoveringDates.includes(day.day),
         },
       ]"
       :data-testid="`day-${day.day}`"
       @click="setPeriod(day)"
+      @mouseenter="dayMouseOver(day)"
+      @mouseleave="dayMouseLeave"
     >
       <img
         v-if="

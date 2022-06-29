@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Ref } from "vue";
 
-import { useCalendar } from "../hooks/useCalendar";
+import type { DayType } from "ghost-calendar";
+
+import { getDatesBetweenTwoDates } from "./helper";
 import { rangeDates } from "./inMemory/rangeDates";
+import { useCalendar } from "../hooks/useCalendar";
 
 import BaseIcon from "./BaseIcon.vue";
 import CalendarDays from "./CalendarDays.vue";
@@ -13,7 +17,11 @@ import Days from "./Days.vue";
 const showCalendar = ref(true);
 const showYear = ref(false);
 const currentYear = ref(new Date());
-const { calendar, setPeriod, setPaginate } = useCalendar({
+const {
+  calendar,
+  setPeriod: periodSetter,
+  setPaginate,
+} = useCalendar({
   locale: "fr",
   rangeDates,
   startDate: new Date(),
@@ -23,16 +31,34 @@ const { calendar, setPeriod, setPaginate } = useCalendar({
   visualMonth: 2,
 });
 
-// calendar with sliced 2 month + active index lié au checkin checkOut
-// calendar with sliced 2 month + active index lié à la date du jour car pas de checkin
+const hoveringDates: Ref<string[]> = ref([]);
+const hoveringDay: Ref<string | undefined> = ref("");
 
-// =>  calendar with all month
-
+const dayMouseOver = (day: DayType) => {
+  hoveringDay.value = day.day;
+  // if (inWeeklyPeriods(day) || inNightlyPeriod(day)) {
+  //   hoveringPeriod.value = getCurrentPeriod(day);
+  // }
+  if (calendar.value.checkIn && !calendar.value.checkOut) {
+    hoveringDates.value = getDatesBetweenTwoDates(
+      calendar.value.checkIn,
+      hoveringDay.value
+    );
+  }
+};
+const dayMouseLeave = () => {
+  hoveringDay.value = "";
+};
 const openCalendar = () => {
   console.log("openCalendar");
 };
 const paginate = (operator: string) => {
   setPaginate(operator);
+};
+const setPeriod = (day: DayType) => {
+  hoveringDates.value = [];
+
+  periodSetter(day);
 };
 </script>
 
@@ -79,7 +105,13 @@ const paginate = (operator: string) => {
 
           <CalendarDays />
           <div class="calendar_wrapper_content-days">
-            <Days :days="month.days" @setPeriod="setPeriod" />
+            <Days
+              :days="month.days"
+              :hovering-dates="hoveringDates"
+              @dayMouseLeave="dayMouseLeave"
+              @dayMouseOver="dayMouseOver"
+              @setPeriod="setPeriod"
+            />
           </div>
         </div>
       </div>
