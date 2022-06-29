@@ -12,22 +12,37 @@ import { Week } from "./Week";
 type CalendarComponentType = {
   bookingDayHandler: (day: DayType) => void;
   locale?: LocaleType;
-  nbMonths: number;
-  rangeDates: Required<Period>[];
   rangeMarkerHanlder: (day: { startDate: string; endDate: string }) => void;
   withInteraction: boolean;
+  startDate: Date;
+  endDate: Date;
+  checkIn?: Date;
+  checkOut?: Date;
+  paginateIndex: number;
+  rangeDates: Required<Period>[];
+  visualMonth: number;
 };
 
 const CalendarComponent = ({
   bookingDayHandler,
   locale,
-  nbMonths,
   rangeDates,
   rangeMarkerHanlder,
   withInteraction,
+  startDate,
+  endDate,
+  paginateIndex,
+  visualMonth,
 }: CalendarComponentType) => {
   const style = useStyle();
-  const { calendar, setPeriod } = useCalendar({ locale, nbMonths, rangeDates });
+  const { calendar, setPeriod } = useCalendar({
+    locale,
+    startDate,
+    endDate,
+    rangeDates,
+    paginateIndex,
+    visualMonth,
+  });
 
   if (!calendar) {
     return (
@@ -37,10 +52,10 @@ const CalendarComponent = ({
     );
   }
 
-  if (calendar.startDate && calendar.endDate) {
+  if (calendar.checkIn && calendar.checkIn) {
     rangeMarkerHanlder({
-      startDate: calendar.startDate,
-      endDate: calendar.endDate,
+      startDate: calendar.checkIn,
+      endDate: calendar.checkOut,
     });
   }
 

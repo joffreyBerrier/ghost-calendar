@@ -33,16 +33,11 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     return this.nextMonth;
   }
 
-  private getIndexMonth(date: string) {
-    return this.vm.months.findIndex(
-      (month) => month.monthKey === new Date(date as string).getMonth()
-    );
-  }
-
   private generateMonths(props: {
     period?: Period;
     checkIn?: Date;
     checkOut?: Date;
+    bookingColors?: Record<string, string>;
   }) {
     this.vm.months = [];
 
@@ -55,6 +50,7 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
           rangeDates: this.vm.rangeDates,
           checkIn: props.checkIn,
           checkOut: props.checkOut,
+          bookingColors: props.bookingColors,
         })
           .getMonthKey()
           .getMonthName(this.locale)
@@ -140,18 +136,18 @@ export class CalendarPresenter extends Presenter<CalendarVM> {
     checkIn,
     checkOut,
     visualMonth,
+    bookingColors,
   }: {
     period?: Period;
     checkIn?: Date;
     checkOut?: Date;
     visualMonth?: number;
-    startDate: Date;
-    endDate: Date;
+    bookingColors?: Record<string, string>;
   }) {
     if (visualMonth) {
       this.vm.visualMonth = visualMonth;
     }
 
-    this.generateMonths({ period, checkIn, checkOut });
+    this.generateMonths({ period, checkIn, checkOut, bookingColors });
   }
 }

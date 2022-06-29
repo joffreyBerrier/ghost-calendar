@@ -47,7 +47,7 @@ const selectStyleManager = (day: DayType) => {
     return style.dayBookingContract;
   }
 
-  if (day.isBookingMarker) {
+  if (day.isRangeDate) {
     return style.dayBookingOwner;
   }
 

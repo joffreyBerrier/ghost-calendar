@@ -81,19 +81,19 @@ describe("Day", () => {
   test("Should notify marker if start date and and date is defined", () => {
     const day = new Day(new Date("2022-05-18"))
       .getDate()
-      .setBookingMarker({ startDate: "2022-05-17", endDate: "2022-05-19" })
+      .setRangeDate({ startDate: "2022-05-17", endDate: "2022-05-19" })
       .build();
 
     expect(day).toEqual({
       day: "2022-05-18",
-      isBookingMarker: true,
+      isRangeDate: true,
     });
   });
 
   test("Should notify marker if day is not between period", () => {
     const day = new Day(new Date("2022-05-17"))
       .getDate()
-      .setBookingMarker({ startDate: "2022-05-17", endDate: "2022-05-19" })
+      .setRangeDate({ startDate: "2022-05-17", endDate: "2022-05-19" })
       .build();
 
     expect(day).toEqual({
@@ -104,7 +104,7 @@ describe("Day", () => {
   test("Should not notify marker if period is undefined", () => {
     const day = new Day(new Date("2022-05-18"))
       .getDate()
-      .setBookingMarker()
+      .setRangeDate()
       .build();
 
     expect(day).toEqual({ day: "2022-05-18" });

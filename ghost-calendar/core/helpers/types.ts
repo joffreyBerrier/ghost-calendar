@@ -5,7 +5,7 @@ export type DayType = {
   day?: string;
   dayNumber?: string;
   isBooking?: boolean;
-  isBookingMarker?: boolean;
+  isRangeDate?: boolean;
   isCurrentDay?: boolean;
   isEndDate?: boolean;
   isPastDay?: boolean;
@@ -13,6 +13,8 @@ export type DayType = {
   checkInTime?: number;
   checkOutTime?: number;
   period?: { checkIn: string; checkOut: string };
+  isHalfDay?: boolean;
+  bookingColor?: string;
 };
 
 export type MonthType = {

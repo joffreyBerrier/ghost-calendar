@@ -10,6 +10,7 @@ type CalendarProps = {
   rangeDates: Required<Period>[];
   checkIn: Date;
   checkOut: Date;
+  visualMonth: number;
 };
 
 export const useCalendar = ({

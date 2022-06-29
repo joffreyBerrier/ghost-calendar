@@ -21,6 +21,7 @@ export default class Month {
       rangeDates?: Required<Period>[];
       checkIn?: Date;
       checkOut?: Date;
+      bookingColors?: Record<string, string>;
     }
   ) {}
 
@@ -37,8 +38,8 @@ export default class Month {
           .isPast(currentDate)
           .isStartDate(this.props.period?.startDate)
           .isEndDate(this.props.period?.endDate)
-          .setBookingType(this.props.rangeDates)
-          .setBookingMarker(
+          .setBookingType(this.props.rangeDates, this.props.bookingColors)
+          .setRangeDate(
             this.props.period,
             this.props.checkIn,
             this.props.checkOut
@@ -46,6 +47,7 @@ export default class Month {
           .setCheckInOutTimes(this.props.rangeDates)
           .setPeriod(this.props.rangeDates)
           .isCheckInCheckOut(this.props.checkIn, this.props.checkOut)
+          .isHalfDay()
           .build()
       );
     } else {
@@ -98,6 +100,6 @@ export default class Month {
   }
 
   build() {
-    return JSON.parse(JSON.stringify(this.month));
+    return { ...this.month };
   }
 }

@@ -11,19 +11,37 @@ import {
 
 type CalendarProps = {
   locale: LocaleType;
-  nbMonths: number;
+  startDate: Date;
+  endDate: Date;
+  checkIn?: Date;
+  checkOut?: Date;
+  paginateIndex: number;
   rangeDates: Required<Period>[];
+  visualMonth: number;
 };
 
 export const useCalendar = ({
   locale,
-  nbMonths,
+  startDate,
+  endDate,
+  checkIn,
+  checkOut,
+  paginateIndex,
   rangeDates,
+  visualMonth,
 }: CalendarProps) => {
   const [calendarState, setCalendarState] = useState<CalendarVM | null>(null);
 
   const presenter = new CalendarPresenter(locale);
-  const calendar = new Calendar(nbMonths + 1, rangeDates);
+  const calendar = new Calendar({
+    startDate,
+    endDate,
+    checkIn,
+    checkOut,
+    paginateIndex,
+    rangeDates,
+    visualMonth,
+  });
 
   calendar.build(presenter);
 
