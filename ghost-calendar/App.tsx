@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { CalendarComponent } from "./react-native/components";
+import { CalendarComponent, rangeDates } from "./react-native/components";
 
 export default function App() {
   return (
@@ -11,14 +11,11 @@ export default function App() {
         rangeMarkerHanlder={(range) => {
           /* return range date selected on click */
         }}
-        locale="en"
+        locale="fr"
         startDate={new Date()}
         endDate={new Date(new Date().getFullYear() + 2, 0, 1)}
-        checkIn={new Date("2022-09-01")}
-        checkOut={new Date("2022-09-10")}
-        visualMonth={2}
-        rangeDates={[]}
-        bookingColors={{ other: { startEnd: "#00FF00", beetween: "#FF0FF0" } }}
+        visualMonth={12}
+        rangeDates={rangeDates}
         withInteraction
       />
     </View>

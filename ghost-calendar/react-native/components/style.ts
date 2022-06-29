@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-import { DayType, TypeBookingFormatted } from "../../core";
+import { DayType } from "../../core";
 import {
   communStyleType,
   leftBookingStyleType,
@@ -9,46 +9,25 @@ import {
 
 const SMALL_PHONE = Dimensions.get("window").width <= 375;
 
-const hasBookingCondition = (day: DayType, type: TypeBookingFormatted) => {
-  return (
-    day.isBooking &&
-    !day.isStartDate &&
-    !day.isEndDate &&
-    day.bookingType === type
-  );
-};
-
 export const getCurrentDayColor = (day: DayType) => {
   if (day.isCurrentDay || day.isStartDate || day.isEndDate) {
-    return "font-bold";
+    return { fontWeight: "bold" };
   }
 
   if (day.isPastDay) {
-    return "text-gray-400";
+    return { color: "#aaaaaa" };
   }
 
-  return "";
+  return {};
 };
 
 const selectStyleManager = (day: DayType) => {
-  if (hasBookingCondition(day, "other")) {
-    return style.dayBookingOther;
-  }
-
-  if (hasBookingCondition(day, "owner")) {
-    return style.dayBookingOwner;
-  }
-
-  if (hasBookingCondition(day, "option")) {
-    return style.dayBookingOption;
-  }
-
-  if (hasBookingCondition(day, "contract")) {
-    return style.dayBookingContract;
-  }
-
   if (day.isRangeDate) {
-    return style.dayBookingOwner;
+    return style.ownerDayBooking;
+  }
+
+  if (day.bookingType && !day.isStartDate && !day.isEndDate) {
+    return style[`${day.bookingType}DayBooking`];
   }
 
   return style.day;
@@ -61,10 +40,6 @@ export const styleSelector = (day: DayType) => {
 
   if (day.isCurrentDay && !day.isBooking) {
     return style.dayCurrent;
-  }
-
-  if (day.isCurrentDay && day.isBooking) {
-    return selectStyleManager(day);
   }
 
   return selectStyleManager(day);
@@ -122,56 +97,55 @@ export const style = StyleSheet.create({
     ...communStyle,
     borderColor: "#decaaa",
   },
-  dayBookingOther: {
+  otherDayBooking: {
     ...communStyle,
     borderColor: "#DDDDDD",
     backgroundColor: "#DDDDDD",
   },
-  dayBookingOwner: {
+  ownerDayBooking: {
     ...communStyle,
     borderColor: "#D7E0E0",
     backgroundColor: "#D7E0E0",
   },
-  dayBookingOption: {
+  optionDayBooking: {
     ...communStyle,
     borderColor: "#EEEEEE",
     backgroundColor: "#EEEEEE",
   },
-  dayBookingContract: {
+  contractDayBooking: {
     ...communStyle,
     borderColor: "#F1E8DA",
     backgroundColor: "#F1E8DA",
   },
-  startDateOther: {
+  otherStartDate: {
     ...leftBookingStyle,
     borderBottomColor: "#AAAAAA",
   },
-  endDateOther: {
+  otherEndDate: {
     ...rightBookingStyle,
     borderTopColor: "#CCCCCC",
   },
-
-  startDateOwner: {
+  ownerStartDate: {
     ...leftBookingStyle,
     borderBottomColor: "#AEC1C1",
   },
-  endDateOwner: {
+  ownerEndDate: {
     ...rightBookingStyle,
     borderTopColor: "#C2D1D1",
   },
-  startDateOption: {
+  optionStartDate: {
     ...leftBookingStyle,
     borderBottomColor: "#EEEEEE",
   },
-  endDateOption: {
+  optionEndDate: {
     ...rightBookingStyle,
     borderTopColor: "#E6E6E6",
   },
-  startDateContract: {
+  contractStartDate: {
     ...leftBookingStyle,
     borderBottomColor: "#E2D1B5",
   },
-  endDateContract: {
+  contractEndDate: {
     ...rightBookingStyle,
     borderTopColor: "#E9DDC8",
   },

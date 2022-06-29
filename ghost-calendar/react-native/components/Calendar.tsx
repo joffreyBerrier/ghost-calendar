@@ -1,8 +1,6 @@
 import { View, ScrollView, Text, ActivityIndicator } from "react-native";
 import { BookingColorType, DayType, LocaleType, Period } from "../../core";
 
-import { useStyle } from "../hooks/useStyle";
-
 import { useCalendar } from "../hooks/useCalendar";
 
 import { Days } from "./Days";
@@ -20,7 +18,7 @@ type CalendarComponentType = {
   checkOut?: Date;
   rangeDates: Required<Period>[];
   visualMonth: number;
-  bookingColors: BookingColorType;
+  bookingColors?: BookingColorType;
 };
 
 const CalendarComponent = ({
@@ -34,9 +32,8 @@ const CalendarComponent = ({
   visualMonth,
   checkIn,
   checkOut,
-  bookingColors,
+  bookingColors = {},
 }: CalendarComponentType) => {
-  const style = useStyle();
   const { calendar, setPeriod } = useCalendar({
     bookingColors,
     checkIn,
@@ -50,7 +47,7 @@ const CalendarComponent = ({
 
   if (!calendar) {
     return (
-      <View style={style("flex-1 justify-center items-center")}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator />
       </View>
     );

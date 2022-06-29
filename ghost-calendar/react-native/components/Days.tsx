@@ -3,8 +3,6 @@ import { View, Text, Pressable, Image } from "react-native";
 import { DayType } from "../../core";
 import * as Haptics from "expo-haptics";
 
-import { useStyle } from "../hooks/useStyle";
-
 import {
   getNextDay,
   getPreviousDay,
@@ -61,8 +59,6 @@ export const Days = memo(
     setPeriod,
     withInteraction,
   }: DayComponentType) => {
-    const style = useStyle();
-
     const onPress = (day: DayType) => {
       if (withInteraction && day.day) {
         if (day.isBooking) bookingDayHandler(day);
@@ -81,21 +77,17 @@ export const Days = memo(
             key={`${day.day}${idx}`}
           >
             <CheckMarker day={day} days={days} index={idx} />
-            {day.bookingType === "option" &&
-              !day.isStartDate &&
-              !day.isEndDate && (
-                <Image
-                  source={require("./option.png")}
-                  style={calendarStyle.ach}
-                />
-              )}
+            {day.bookingType === "option" && !day.isHalfDay && (
+              <Image
+                source={require("./option.png")}
+                style={calendarStyle.ach}
+              />
+            )}
             <Text
-              style={[
-                style(getCurrentDayColor(day)),
-                {
-                  textDecorationLine: day.isPastDay ? "line-through" : "none",
-                },
-              ]}
+              style={{
+                ...(getCurrentDayColor(day) as {}),
+                textDecorationLine: day.isPastDay ? "line-through" : "none",
+              }}
             >
               {day.dayNumber}
             </Text>

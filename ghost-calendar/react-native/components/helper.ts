@@ -16,3 +16,19 @@ export const periodHasNotStartDate = (day: DayType) =>
 
 export const periodHasCompleted = (day: DayType) =>
   day.isStartDate && day.isEndDate;
+
+export const hasScrollToDown = ({
+  layoutMeasurement,
+  contentOffset,
+  contentSize,
+}: {
+  layoutMeasurement: { height: number };
+  contentOffset: { y: number };
+  contentSize: { height: number };
+}) => {
+  const paddingToBottom = 20;
+  return (
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom
+  );
+};

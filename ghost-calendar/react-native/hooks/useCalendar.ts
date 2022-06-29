@@ -61,6 +61,14 @@ export const useCalendar = ({
     }
   };
 
+  const setPaginate = (operator: string) => {
+    calendar.paginate(presenter, operator);
+
+    presenter.subscribeVM((calendar) => {
+      setCalendarState(calendar);
+    });
+  };
+
   useEffect(() => {
     presenter.subscribeVM((calendar) => {
       setCalendarState(calendar);
@@ -70,5 +78,6 @@ export const useCalendar = ({
   return {
     calendar: calendarState,
     setPeriod,
+    setPaginate,
   };
 };
