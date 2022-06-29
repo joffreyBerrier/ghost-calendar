@@ -30,6 +30,7 @@ export const useCalendar = ({
     checkIn,
     checkOut,
     visualMonth,
+    bookingColors: { other: "#000000" },
   });
 
   calendar.build(presenter);

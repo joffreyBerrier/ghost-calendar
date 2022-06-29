@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DayType } from "ghost-calendar";
+import type { DayType } from "core";
 
 defineProps<{
   days: DayType[];
@@ -57,7 +57,7 @@ const dayMouseLeave = () => {
           'calendar_day--today': day.isCurrentDay,
           'calendar_day--startDate': day.isStartDate,
           'calendar_day--endDate': day.isEndDate,
-          'calendar_day--checkInCheckOut': day.isBookingMarker,
+          'calendar_day--checkInCheckOut': day.isRangeDate,
           'calendar_day--booking': day.isBooking,
           'calendar_day--hovering': hoveringDates.includes(day.day),
         },
