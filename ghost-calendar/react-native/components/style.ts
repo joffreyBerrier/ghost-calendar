@@ -7,7 +7,29 @@ import {
   rightBookingStyleType,
 } from "./types";
 
-const SMALL_PHONE = Dimensions.get("window").width <= 375;
+const SMALL_PHONE = Dimensions.get("window").width === 375;
+const MIDDLE_PHONE = Dimensions.get("window").width === 414;
+const MAX_PHONE = Dimensions.get("window").width === 428;
+
+const getBorderWidthLeftRight = () => {
+  if (SMALL_PHONE) {
+    return 49;
+  } else if (MIDDLE_PHONE) {
+    return 54;
+  } else if (MAX_PHONE) {
+    return 56;
+  } else {
+    return 47;
+  }
+};
+
+const getBorderWidthTopBottom = () => {
+  if (SMALL_PHONE || MIDDLE_PHONE || MIDDLE_PHONE) {
+    return 41;
+  }
+
+  return 43;
+};
 
 export const getCurrentDayColor = (day: DayType) => {
   if (day.isCurrentDay || day.isStartDate || day.isEndDate) {
@@ -60,8 +82,8 @@ const rightBookingStyle: rightBookingStyleType = {
   right: 0,
   position: "absolute",
   top: 0,
-  borderTopWidth: 41,
-  borderRightWidth: SMALL_PHONE ? 49 : 51,
+  borderTopWidth: getBorderWidthTopBottom(),
+  borderRightWidth: getBorderWidthLeftRight(),
   borderRightColor: "transparent",
 };
 
@@ -71,8 +93,8 @@ const leftBookingStyle: leftBookingStyleType = {
   left: 0,
   position: "absolute",
   top: 0,
-  borderBottomWidth: 41,
-  borderLeftWidth: SMALL_PHONE ? 49 : 51,
+  borderBottomWidth: getBorderWidthTopBottom(),
+  borderLeftWidth: getBorderWidthLeftRight(),
   borderLeftColor: "transparent",
 };
 
@@ -86,8 +108,8 @@ export const style = StyleSheet.create({
     fontSize: 16,
   },
   ach: {
-    width: SMALL_PHONE ? 49 : 50.6,
-    height: SMALL_PHONE ? 41 : 41,
+    width: getBorderWidthLeftRight(),
+    height: getBorderWidthTopBottom(),
     position: "absolute",
     flexDirection: "row",
     top: 0,
