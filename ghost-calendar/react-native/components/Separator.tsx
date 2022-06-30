@@ -9,7 +9,7 @@ export const Separator = memo(() => {
         width: "90%",
         marginLeft: 20,
         justifyContent: "center",
-        borderWidth: 1,
+        borderWidth: 0.8,
         borderColor: "#eaeaea",
       }}
     />

@@ -1,4 +1,4 @@
-import { Period } from "ghost-calendar";
+import { Period } from "../../../core";
 
 export const rangeDates: Required<Period>[] = [
   {
@@ -39,7 +39,7 @@ export const rangeDates: Required<Period>[] = [
   {
     startDate: "2022-12-18",
     endDate: "2022-12-21",
-    type: "other",
+    type: "option",
     checkInTime: 17,
     checkOutTime: 10,
   },

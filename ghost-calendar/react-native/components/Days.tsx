@@ -16,6 +16,7 @@ import {
   styleSelector,
   style as calendarStyle,
 } from "./style";
+import { CurrentDayPointer } from "./CurrentDayPointer";
 import { CheckIn, CheckOut, CheckInCheckOut } from "./PeriodDelimiter";
 
 type DayComponentType = {
@@ -70,29 +71,34 @@ export const Days = memo(
 
     const renderDays = useMemo(
       () =>
-        days.map((day, idx) => (
-          <Pressable
-            onPress={() => onPress(day)}
-            style={styleSelector(day)}
-            key={`${day.day}${idx}`}
-          >
-            <CheckMarker day={day} days={days} index={idx} />
-            {day.bookingType === "option" && !day.isHalfDay && (
-              <Image
-                source={require("./option.png")}
-                style={calendarStyle.ach}
-              />
-            )}
-            <Text
-              style={{
-                ...(getCurrentDayColor(day) as {}),
-                textDecorationLine: day.isPastDay ? "line-through" : "none",
-              }}
+        days.map((day, idx) => {
+          const isBookingOption =
+            day.bookingType === "option" && !day.isStartDate && !day.isEndDate;
+          return (
+            <Pressable
+              onPress={() => onPress(day)}
+              style={styleSelector(day)}
+              key={`${day.day}${idx}`}
             >
-              {day.dayNumber}
-            </Text>
-          </Pressable>
-        )),
+              {day.isCurrentDay && <CurrentDayPointer />}
+              <CheckMarker day={day} days={days} index={idx} />
+              {isBookingOption && (
+                <Image
+                  source={require("./option.png")}
+                  style={calendarStyle.ach}
+                />
+              )}
+              <Text
+                style={{
+                  ...(getCurrentDayColor(day) as {}),
+                  textDecorationLine: day.isPastDay ? "line-through" : "none",
+                }}
+              >
+                {day.dayNumber}
+              </Text>
+            </Pressable>
+          );
+        }),
       [days]
     );
 

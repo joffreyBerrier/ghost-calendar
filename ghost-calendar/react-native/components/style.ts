@@ -61,7 +61,7 @@ const rightBookingStyle: rightBookingStyleType = {
   position: "absolute",
   top: 0,
   borderTopWidth: 41,
-  borderRightWidth: SMALL_PHONE ? 49 : 54,
+  borderRightWidth: SMALL_PHONE ? 49 : 51,
   borderRightColor: "transparent",
 };
 
@@ -72,7 +72,7 @@ const leftBookingStyle: leftBookingStyleType = {
   position: "absolute",
   top: 0,
   borderBottomWidth: 41,
-  borderLeftWidth: SMALL_PHONE ? 49 : 54,
+  borderLeftWidth: SMALL_PHONE ? 49 : 51,
   borderLeftColor: "transparent",
 };
 
@@ -86,7 +86,7 @@ export const style = StyleSheet.create({
     fontSize: 16,
   },
   ach: {
-    width: SMALL_PHONE ? 49 : 54,
+    width: SMALL_PHONE ? 49 : 50.6,
     height: SMALL_PHONE ? 41 : 41,
     position: "absolute",
     flexDirection: "row",

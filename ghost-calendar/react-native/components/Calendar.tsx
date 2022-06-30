@@ -61,11 +61,13 @@ const CalendarComponent = ({
   }
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: "center" }}>
+    <View
+      style={{ flexDirection: "row", justifyContent: "center", marginTop: 15 }}
+    >
       <ScrollView>
         {calendar.months.map((month, idx) => (
           <View key={`${month.id}${idx}`}>
-            <View style={{ marginBottom: 32, marginTop: 40, paddingLeft: 28 }}>
+            <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 28 }}>
               <Text
                 style={{ fontWeight: "bold", fontSize: 16, lineHeight: 24 }}
               >
