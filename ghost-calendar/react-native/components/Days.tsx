@@ -84,7 +84,7 @@ export const Days = memo(
               <CheckMarker day={day} days={days} index={idx} />
               {isBookingOption && (
                 <Image
-                  source={require("./option.png")}
+                  source={require("./optionFull.png")}
                   style={calendarStyle.ach}
                 />
               )}
@@ -92,6 +92,7 @@ export const Days = memo(
                 style={{
                   ...(getCurrentDayColor(day) as {}),
                   textDecorationLine: day.isPastDay ? "line-through" : "none",
+                  zIndex: 3,
                 }}
               >
                 {day.dayNumber}

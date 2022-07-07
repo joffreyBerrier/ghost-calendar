@@ -1,23 +1,37 @@
 import { memo } from "react";
-import { View } from "react-native";
+import { View, Image } from "react-native";
 import { DayType } from "../../core";
 
-import { style } from "./style";
+import { style, getTypeColor } from "./style";
 
 export const CheckIn = memo(({ day }: { day: DayType }) => {
   if (day.bookingType) {
-    return <View style={style[`${day.bookingType}StartDate`]} />;
+    return (
+      <>
+        {day.bookingType === "option" && (
+          <Image source={require("./optionLeft.png")} style={style.ach2} />
+        )}
+        <View style={getTypeColor(day.bookingType, true, false)} />
+      </>
+    );
   }
 
-  return <View style={style.ownerStartDate} />;
+  return <View style={getTypeColor("owner", true, false)} />;
 });
 
 export const CheckOut = memo(({ day }: { day: DayType }) => {
   if (day.bookingType) {
-    return <View style={style[`${day.bookingType}EndDate`]} />;
+    return (
+      <>
+        {day.bookingType === "option" && (
+          <Image source={require("./optionRight.png")} style={style.ach2} />
+        )}
+        <View style={getTypeColor(day.bookingType, false, true)} />
+      </>
+    );
   }
 
-  return <View style={style.ownerEndDate} />;
+  return <View style={getTypeColor("owner", false, true)} />;
 });
 
 export const CheckInCheckOut = ({
@@ -30,8 +44,14 @@ export const CheckInCheckOut = ({
   if (yesterday.bookingType && tomorrow.bookingType) {
     return (
       <>
-        <View style={style[`${yesterday.bookingType}EndDate`]} />
-        <View style={style[`${tomorrow.bookingType}StartDate`]} />
+        {yesterday.bookingType === "option" && (
+          <Image source={require("./optionLeft.png")} style={style.ach2} />
+        )}
+        {tomorrow.bookingType === "option" && (
+          <Image source={require("./optionRight.png")} style={style.ach2} />
+        )}
+        <View style={getTypeColor(yesterday.bookingType)} />
+        <View style={getTypeColor(yesterday.bookingType)} />
       </>
     );
   }
@@ -39,8 +59,11 @@ export const CheckInCheckOut = ({
   if (!yesterday.bookingType && tomorrow.bookingType) {
     return (
       <>
-        <View style={style[`${tomorrow.bookingType}StartDate`]} />
-        <View style={style.ownerEndDate} />
+        {tomorrow.bookingType === "option" && (
+          <Image source={require("./optionLeft.png")} style={style.ach2} />
+        )}
+        <View style={getTypeColor(tomorrow.bookingType, true, false)} />
+        <View style={getTypeColor("owner", false, true)} />
       </>
     );
   }
@@ -48,8 +71,11 @@ export const CheckInCheckOut = ({
   if (yesterday.bookingType && !tomorrow.bookingType) {
     return (
       <>
-        <View style={style[`${yesterday.bookingType}EndDate`]} />
-        <View style={style.ownerStartDate} />
+        {yesterday.bookingType === "option" && (
+          <Image source={require("./optionRight.png")} style={style.ach2} />
+        )}
+        <View style={getTypeColor(yesterday.bookingType, false, true)} />
+        <View style={getTypeColor("owner", true, false)} />
       </>
     );
   }

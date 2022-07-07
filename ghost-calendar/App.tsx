@@ -12,9 +12,9 @@ export default function App() {
           /* return range date selected on click */
         }}
         locale="fr"
-        startDate={new Date()}
+        startDate={new Date(new Date().getFullYear(), 0, 1)}
         endDate={new Date(new Date().getFullYear() + 2, 0, 1)}
-        visualMonth={12}
+        visualMonth={24}
         rangeDates={rangeDates}
         withInteraction
       />

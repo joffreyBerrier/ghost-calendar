@@ -1,35 +1,7 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, StyleProp, ViewStyle } from "react-native";
 
 import { DayType } from "../../core";
-import {
-  communStyleType,
-  leftBookingStyleType,
-  rightBookingStyleType,
-} from "./types";
-
-const SMALL_PHONE = Dimensions.get("window").width === 375;
-const MIDDLE_PHONE = Dimensions.get("window").width === 414;
-const MAX_PHONE = Dimensions.get("window").width === 428;
-
-const getBorderWidthLeftRight = () => {
-  if (SMALL_PHONE) {
-    return 49;
-  } else if (MIDDLE_PHONE) {
-    return 54;
-  } else if (MAX_PHONE) {
-    return 56;
-  } else {
-    return 47;
-  }
-};
-
-const getBorderWidthTopBottom = () => {
-  if (SMALL_PHONE || MIDDLE_PHONE || MIDDLE_PHONE) {
-    return 41;
-  }
-
-  return 43;
-};
+import { communStyleType } from "./types";
 
 export const getCurrentDayColor = (day: DayType) => {
   if (day.isCurrentDay || day.isStartDate || day.isEndDate) {
@@ -67,50 +39,63 @@ export const styleSelector = (day: DayType) => {
   return selectStyleManager(day);
 };
 
+const WIDTH = 50;
+
 const communStyle: communStyleType = {
   width: "13%",
+  height: WIDTH,
   flexDirection: "row",
   justifyContent: "center",
-  paddingTop: 12,
-  paddingBottom: 12,
   fontSize: 16,
+  paddingTop: "4%",
 };
 
-const rightBookingStyle: rightBookingStyleType = {
-  flexDirection: "row",
-  flexWrap: "wrap",
-  right: 0,
-  position: "absolute",
-  top: 0,
-  borderTopWidth: getBorderWidthTopBottom(),
-  borderRightWidth: getBorderWidthLeftRight(),
-  borderRightColor: "transparent",
-};
+export const getTypeColor = (
+  type: "other" | "contract" | "option" | "owner",
+  noLeftColor?: boolean,
+  noRightColor?: boolean
+): StyleProp<ViewStyle> => {
+  const theme = {
+    other: { start: "#AAAAAA", end: "#CCCCCC" },
+    contract: { start: "#E2D1B5", end: "#E9DDC8" },
+    option: { start: "transparent", end: "transparent" },
+    owner: { start: "#AEC1C1", end: "#C2D1D1" },
+  };
 
-const leftBookingStyle: leftBookingStyleType = {
-  flexDirection: "row",
-  flexWrap: "wrap",
-  left: 0,
-  position: "absolute",
-  top: 0,
-  borderBottomWidth: getBorderWidthTopBottom(),
-  borderLeftWidth: getBorderWidthLeftRight(),
-  borderLeftColor: "transparent",
+  const MARGIN = 0;
+
+  return {
+    position: "absolute",
+    zIndex: 2,
+    top: MARGIN,
+    left: MARGIN,
+    right: MARGIN,
+    borderTopWidth: WIDTH,
+    borderRightWidth: WIDTH,
+    borderRightColor: noRightColor ? "transparent" : theme[type].start,
+    borderLeftColor: noLeftColor ? "transparent" : theme[type].end,
+    borderBottomColor: noRightColor ? "transparent" : theme[type].start,
+    borderTopColor: noLeftColor ? "transparent" : theme[type].end,
+  };
 };
 
 export const style = StyleSheet.create({
   day: {
-    width: "13%",
-    flexDirection: "row",
-    justifyContent: "center",
-    paddingTop: 12,
-    paddingBottom: 12,
-    fontSize: 16,
+    ...communStyle,
   },
   ach: {
-    width: getBorderWidthLeftRight(),
-    height: getBorderWidthTopBottom(),
+    width: "100%",
+    height: WIDTH,
     position: "absolute",
+    flexDirection: "row",
+    top: 0,
+    flexWrap: "wrap",
+  },
+  ach2: {
+    width: "100%",
+    height: WIDTH,
+    position: "absolute",
+    zIndex: 2,
     flexDirection: "row",
     top: 0,
     flexWrap: "wrap",
@@ -131,44 +116,12 @@ export const style = StyleSheet.create({
   },
   optionDayBooking: {
     ...communStyle,
-    borderColor: "#EEEEEE",
-    backgroundColor: "#EEEEEE",
+    borderColor: "transparent",
+    backgroundColor: "transparent",
   },
   contractDayBooking: {
     ...communStyle,
     borderColor: "#F1E8DA",
     backgroundColor: "#F1E8DA",
-  },
-  otherStartDate: {
-    ...leftBookingStyle,
-    borderBottomColor: "#AAAAAA",
-  },
-  otherEndDate: {
-    ...rightBookingStyle,
-    borderTopColor: "#CCCCCC",
-  },
-  ownerStartDate: {
-    ...leftBookingStyle,
-    borderBottomColor: "#AEC1C1",
-  },
-  ownerEndDate: {
-    ...rightBookingStyle,
-    borderTopColor: "#C2D1D1",
-  },
-  optionStartDate: {
-    ...leftBookingStyle,
-    borderBottomColor: "#EEEEEE",
-  },
-  optionEndDate: {
-    ...rightBookingStyle,
-    borderTopColor: "#E6E6E6",
-  },
-  contractStartDate: {
-    ...leftBookingStyle,
-    borderBottomColor: "#E2D1B5",
-  },
-  contractEndDate: {
-    ...rightBookingStyle,
-    borderTopColor: "#E9DDC8",
   },
 });

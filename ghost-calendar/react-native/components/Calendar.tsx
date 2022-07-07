@@ -1,4 +1,5 @@
-import { View, ScrollView, Text, ActivityIndicator } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { BookingColorType, DayType, LocaleType, Period } from "../../core";
 
 import { useCalendar } from "../hooks/useCalendar";
@@ -34,6 +35,9 @@ const CalendarComponent = ({
   checkOut,
   bookingColors = {},
 }: CalendarComponentType) => {
+  const ref = useRef<FlatList>(null);
+  const [index, setIndex] = useState(0);
+
   const { calendar, setPeriod } = useCalendar({
     bookingColors,
     checkIn,
@@ -60,13 +64,29 @@ const CalendarComponent = ({
     });
   }
 
+  setTimeout(() => {
+    setIndex(new Date().getMonth());
+    ref.current?.scrollToIndex({
+      index,
+      animated: true,
+    });
+  }, 500);
+
   return (
     <View
-      style={{ flexDirection: "row", justifyContent: "center", marginTop: 15 }}
+      style={{
+        flexDirection: "row",
+        justifyContent: "center",
+        marginTop: 15,
+      }}
     >
-      <ScrollView>
-        {calendar.months.map((month, idx) => (
-          <View key={`${month.id}${idx}`}>
+      <FlatList
+        ref={ref}
+        initialScrollIndex={index}
+        data={calendar.months}
+        keyExtractor={(item) => String(item.id)}
+        renderItem={({ item: month, index }) => (
+          <View key={`${month.id}${index}`}>
             <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 28 }}>
               <Text
                 style={{ fontWeight: "bold", fontSize: 16, lineHeight: 24 }}
@@ -82,10 +102,10 @@ const CalendarComponent = ({
               withInteraction={withInteraction}
             />
 
-            {idx !== calendar.months.length - 1 && <Separator />}
+            {index !== calendar.months.length - 1 && <Separator />}
           </View>
-        ))}
-      </ScrollView>
+        )}
+      />
     </View>
   );
 };

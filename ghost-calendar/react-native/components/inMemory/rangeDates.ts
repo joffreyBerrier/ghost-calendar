@@ -50,4 +50,11 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
   },
+  {
+    startDate: "2023-01-18",
+    endDate: "2023-01-21",
+    type: "contract",
+    checkInTime: 17,
+    checkOutTime: 10,
+  },
 ];

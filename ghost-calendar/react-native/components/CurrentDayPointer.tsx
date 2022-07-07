@@ -5,7 +5,7 @@ export const CurrentDayPointer = () => (
     style={{
       backgroundColor: "#356464",
       width: "15%",
-      height: "44%",
+      height: "24%",
       position: "absolute",
       borderRadius: 50,
       bottom: 0,

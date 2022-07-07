@@ -22,29 +22,7 @@ export type communStyleType = {
   width: string;
   flexDirection: flexDirectionType;
   justifyContent: justifyContentType;
-  paddingTop: number;
-  paddingBottom: number;
+  paddingTop: string;
+  height: number;
   fontSize: number;
-};
-
-export type rightBookingStyleType = {
-  flexDirection: flexDirectionType;
-  flexWrap: flexWrapType;
-  right: number;
-  position: positionType;
-  top: number;
-  borderTopWidth: number;
-  borderRightWidth: number;
-  borderRightColor: string;
-};
-
-export type leftBookingStyleType = {
-  flexDirection: flexDirectionType;
-  flexWrap: flexWrapType;
-  left: number;
-  position: positionType;
-  top: number;
-  borderBottomWidth: number;
-  borderLeftWidth: number;
-  borderLeftColor: string;
 };

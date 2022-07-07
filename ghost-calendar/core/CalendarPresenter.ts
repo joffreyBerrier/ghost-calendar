@@ -20,11 +20,12 @@ export class CalendarVM {
 }
 
 export class CalendarPresenter extends Presenter<CalendarVM> {
-  private nextMonth: Date = new Date();
+  private nextMonth: Date;
   private dates: Date[] = [];
 
-  constructor(private locale?: LocaleType) {
+  constructor(private locale?: LocaleType, private startMonth?: Date) {
     super(new CalendarVM());
+    this.nextMonth = this.startMonth || new Date();
   }
 
   private getNextMonth(date: Date, countMonth: number) {

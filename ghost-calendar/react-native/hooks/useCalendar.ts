@@ -33,7 +33,7 @@ export const useCalendar = ({
 }: CalendarProps) => {
   const [calendarState, setCalendarState] = useState<CalendarVM | null>(null);
 
-  const presenter = new CalendarPresenter(locale);
+  const presenter = new CalendarPresenter(locale, startDate);
   const calendar = new Calendar({
     startDate,
     endDate,
