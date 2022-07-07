@@ -52,10 +52,13 @@ const CalendarComponent = ({
   useEffect(() => {
     setTimeout(() => {
       setIndex(new Date().getMonth());
-      ref.current?.scrollToIndex({
-        index,
-        animated: true,
-      });
+
+      if (ref.current && ref.current.scrollToIndex) {
+        ref.current?.scrollToIndex({
+          index,
+          animated: true,
+        });
+      }
     }, 500);
 
     return () => {
@@ -89,6 +92,7 @@ const CalendarComponent = ({
       <FlatList
         ref={ref}
         initialScrollIndex={index}
+        onScrollToIndexFailed={() => {}}
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item: month, index }) => (
