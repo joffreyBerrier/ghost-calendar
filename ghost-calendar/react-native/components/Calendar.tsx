@@ -57,6 +57,10 @@ const CalendarComponent = ({
         animated: true,
       });
     }, 500);
+
+    return () => {
+      setIndex(0);
+    };
   }, []);
 
   if (!calendar) {
