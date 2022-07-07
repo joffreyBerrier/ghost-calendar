@@ -64,7 +64,7 @@ const CalendarComponent = ({
     setTimeout(() => {
       setIndex(currentMonth);
       showScrollingToIndex();
-    }, 1000);
+    }, 500);
 
     return () => {
       setIndex(0);
@@ -97,7 +97,9 @@ const CalendarComponent = ({
       <FlatList
         ref={ref}
         initialScrollIndex={index}
-        onScrollToIndexFailed={() => {}}
+        onScrollToIndexFailed={() => {
+          setIndex(currentMonth);
+        }}
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item: month, index }) => (
