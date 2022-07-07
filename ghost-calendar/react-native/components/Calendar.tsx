@@ -51,16 +51,19 @@ const CalendarComponent = ({
     visualMonth,
   });
 
+  const showScrollingToIndex = () => {
+    if (ref.current && ref.current.scrollToIndex) {
+      ref.current?.scrollToIndex({
+        index,
+        animated: true,
+      });
+    }
+  };
+
   useEffect(() => {
     setTimeout(() => {
       setIndex(currentMonth);
-
-      if (ref.current && ref.current.scrollToIndex) {
-        ref.current?.scrollToIndex({
-          index,
-          animated: true,
-        });
-      }
+      showScrollingToIndex();
     }, 500);
 
     return () => {
@@ -95,7 +98,7 @@ const CalendarComponent = ({
         ref={ref}
         initialScrollIndex={index}
         onScrollToIndexFailed={() => {
-          setIndex(currentMonth);
+          showScrollingToIndex();
         }}
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
