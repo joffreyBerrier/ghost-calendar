@@ -49,6 +49,16 @@ const CalendarComponent = ({
     visualMonth,
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIndex(new Date().getMonth());
+      ref.current?.scrollToIndex({
+        index,
+        animated: true,
+      });
+    }, 500);
+  }, []);
+
   if (!calendar) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -63,14 +73,6 @@ const CalendarComponent = ({
       endDate: calendar.checkOut,
     });
   }
-
-  setTimeout(() => {
-    setIndex(new Date().getMonth());
-    ref.current?.scrollToIndex({
-      index,
-      animated: true,
-    });
-  }, 500);
 
   return (
     <View
