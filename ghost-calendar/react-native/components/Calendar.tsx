@@ -92,10 +92,13 @@ const CalendarComponent = ({
         flexDirection: "row",
         justifyContent: "center",
         marginTop: 15,
+        marginLeft: 12,
+        marginRight: 12,
       }}
     >
       <FlatList
         ref={ref}
+        showsVerticalScrollIndicator={false}
         initialScrollIndex={index}
         onScrollToIndexFailed={() => {
           setIndex(currentMonth);
@@ -104,7 +107,7 @@ const CalendarComponent = ({
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item: month, index }) => (
           <View key={`${month.id}${index}`}>
-            <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 28 }}>
+            <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 19 }}>
               <Text
                 style={{ fontWeight: "bold", fontSize: 16, lineHeight: 24 }}
               >

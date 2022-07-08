@@ -25,4 +25,5 @@ export type communStyleType = {
   paddingTop: string;
   height: number;
   fontSize: number;
+  margin: number;
 };

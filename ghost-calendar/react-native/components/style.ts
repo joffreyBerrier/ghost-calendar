@@ -47,7 +47,8 @@ const communStyle: communStyleType = {
   flexDirection: "row",
   justifyContent: "center",
   fontSize: 16,
-  paddingTop: "4%",
+  paddingTop: "4.2%",
+  margin: 2,
 };
 
 export const getTypeColor = (
@@ -64,19 +65,21 @@ export const getTypeColor = (
 
   const MARGIN = 0;
 
-  return {
-    position: "absolute",
-    zIndex: 2,
-    top: MARGIN,
-    left: MARGIN,
-    right: MARGIN,
-    borderTopWidth: WIDTH,
-    borderRightWidth: WIDTH,
-    borderRightColor: noRightColor ? "transparent" : theme[type].start,
-    borderLeftColor: noLeftColor ? "transparent" : theme[type].end,
-    borderBottomColor: noRightColor ? "transparent" : theme[type].start,
-    borderTopColor: noLeftColor ? "transparent" : theme[type].end,
-  };
+  if (theme[type]) {
+    return {
+      position: "absolute",
+      zIndex: 2,
+      top: MARGIN,
+      left: MARGIN,
+      right: MARGIN,
+      borderTopWidth: WIDTH,
+      borderRightWidth: WIDTH,
+      borderRightColor: noRightColor ? "transparent" : theme[type].start,
+      borderLeftColor: noLeftColor ? "transparent" : theme[type].end,
+      borderBottomColor: noRightColor ? "transparent" : theme[type].start,
+      borderTopColor: noLeftColor ? "transparent" : theme[type].end,
+    };
+  }
 };
 
 export const style = StyleSheet.create({
