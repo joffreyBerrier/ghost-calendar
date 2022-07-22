@@ -31,6 +31,7 @@ export type Period = {
   type?: TypeBookingFormatted | undefined;
   checkInTime?: number;
   checkOutTime?: number;
+  id?: string;
 };
 
 export type LocaleType = "fr" | "en" | undefined;

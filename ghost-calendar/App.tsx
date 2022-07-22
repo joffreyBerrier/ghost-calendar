@@ -8,7 +8,7 @@ export default function App() {
         bookingDayHandler={(day) => {
           /* Return booking day information on click */
         }}
-        rangeMarkerHanlder={(range) => {
+        rangeMarkerHandler={(range) => {
           /* return range date selected on click */
         }}
         locale="fr"

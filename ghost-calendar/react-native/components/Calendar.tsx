@@ -11,7 +11,7 @@ import { Week } from "./Week";
 type CalendarComponentType = {
   bookingDayHandler: (day: DayType) => void;
   locale?: LocaleType;
-  rangeMarkerHanlder: (day: { startDate: string; endDate: string }) => void;
+  rangeMarkerHandler: (day: { startDate: string; endDate: string }) => void;
   withInteraction: boolean;
   startDate: Date;
   endDate: Date;
@@ -26,7 +26,7 @@ const CalendarComponent = ({
   bookingDayHandler,
   locale,
   rangeDates,
-  rangeMarkerHanlder,
+  rangeMarkerHandler,
   withInteraction,
   startDate,
   endDate,
@@ -55,7 +55,7 @@ const CalendarComponent = ({
   }
 
   if (calendar.checkIn && calendar.checkIn) {
-    rangeMarkerHanlder({
+    rangeMarkerHandler({
       startDate: calendar.checkIn,
       endDate: calendar.checkOut,
     });
