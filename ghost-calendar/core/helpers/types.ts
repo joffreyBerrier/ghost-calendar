@@ -15,6 +15,7 @@ export type DayType = {
   period?: { checkIn: string; checkOut: string };
   isHalfDay?: boolean;
   bookingColor?: string;
+  id?: string;
 };
 
 export type MonthType = {

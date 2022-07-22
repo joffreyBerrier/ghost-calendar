@@ -205,6 +205,25 @@ export default class Day {
     return this;
   }
 
+  setBookingId(range: Required<Period>[] | undefined) {
+    if (range) {
+      range.forEach((day) => {
+        if (day.startDate === this.day.day) {
+          this.day.id = day.id;
+        }
+
+        if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+          this.day.id = day.id;
+        }
+
+        if (day.endDate === this.day.day) {
+          this.day.id = day.id;
+        }
+      });
+    }
+    return this;
+  }
+
   build() {
     return { ...this.day };
   }
