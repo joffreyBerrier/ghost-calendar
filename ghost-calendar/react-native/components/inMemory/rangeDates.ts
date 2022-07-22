@@ -7,6 +7,7 @@ export const rangeDates: Required<Period>[] = [
     type: "other",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "1",
   },
   {
     startDate: "2022-06-01",
@@ -14,6 +15,7 @@ export const rangeDates: Required<Period>[] = [
     type: "owner",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "2",
   },
   {
     startDate: "2022-07-15",
@@ -21,6 +23,7 @@ export const rangeDates: Required<Period>[] = [
     type: "other",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "3",
   },
   {
     startDate: "2022-08-15",
@@ -28,6 +31,7 @@ export const rangeDates: Required<Period>[] = [
     type: "other",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "4",
   },
   {
     startDate: "2022-08-18",
@@ -35,6 +39,7 @@ export const rangeDates: Required<Period>[] = [
     type: "owner",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "5",
   },
   {
     startDate: "2022-12-18",
@@ -42,6 +47,7 @@ export const rangeDates: Required<Period>[] = [
     type: "option",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "6",
   },
   {
     startDate: "2023-02-18",
@@ -49,6 +55,7 @@ export const rangeDates: Required<Period>[] = [
     type: "other",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "7",
   },
   {
     startDate: "2023-01-18",
@@ -56,5 +63,6 @@ export const rangeDates: Required<Period>[] = [
     type: "contract",
     checkInTime: 17,
     checkOutTime: 10,
+    id: "8",
   },
 ];
