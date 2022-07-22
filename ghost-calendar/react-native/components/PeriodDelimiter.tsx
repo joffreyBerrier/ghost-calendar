@@ -54,7 +54,7 @@ export const CheckInCheckOut = ({
         )}
         <HalfDaySeparator />
         <View style={getTypeColor(yesterday.bookingType, false, true)} />
-        <View style={getTypeColor("owner", true, false)} />
+        <View style={getTypeColor(tomorrow.bookingType, true, false)} />
       </>
     );
   }

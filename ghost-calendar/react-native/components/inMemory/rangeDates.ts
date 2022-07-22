@@ -17,7 +17,7 @@ export const rangeDates: Required<Period>[] = [
   },
   {
     startDate: "2022-07-15",
-    endDate: "2022-07-20",
+    endDate: "2022-08-15",
     type: "other",
     checkInTime: 17,
     checkOutTime: 10,
