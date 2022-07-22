@@ -4,11 +4,11 @@ export const CurrentDayPointer = () => (
   <View
     style={{
       backgroundColor: "#356464",
-      width: "15%",
-      height: "24%",
+      width: "10%",
+      height: 4.5,
       position: "absolute",
       borderRadius: 50,
-      bottom: 0,
+      bottom: 8,
     }}
   />
 );

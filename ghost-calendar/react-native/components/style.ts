@@ -47,8 +47,8 @@ const communStyle: communStyleType = {
   flexDirection: "row",
   justifyContent: "center",
   fontSize: 16,
-  paddingTop: "4.2%",
-  margin: 2,
+  paddingTop: "4.5%",
+  margin: 1,
 };
 
 export const getTypeColor = (
@@ -57,10 +57,10 @@ export const getTypeColor = (
   noRightColor?: boolean
 ): StyleProp<ViewStyle> => {
   const theme = {
-    other: { start: "#AAAAAA", end: "#CCCCCC" },
+    other: { start: "#D9E8B0", end: "#D9E8B0" },
     contract: { start: "#E2D1B5", end: "#E9DDC8" },
     option: { start: "transparent", end: "transparent" },
-    owner: { start: "#AEC1C1", end: "#C2D1D1" },
+    owner: { start: "#B8DED7", end: "#B8DED7" },
   };
 
   const MARGIN = 0;
@@ -73,7 +73,7 @@ export const getTypeColor = (
       left: MARGIN,
       right: MARGIN,
       borderTopWidth: WIDTH,
-      borderRightWidth: WIDTH,
+      borderRightWidth: WIDTH - 3,
       borderRightColor: noRightColor ? "transparent" : theme[type].start,
       borderLeftColor: noLeftColor ? "transparent" : theme[type].end,
       borderBottomColor: noRightColor ? "transparent" : theme[type].start,
@@ -109,13 +109,13 @@ export const style = StyleSheet.create({
   },
   otherDayBooking: {
     ...communStyle,
-    borderColor: "#DDDDDD",
-    backgroundColor: "#DDDDDD",
+    borderColor: "#E9F1D1",
+    backgroundColor: "#E9F1D1",
   },
   ownerDayBooking: {
     ...communStyle,
-    borderColor: "#D7E0E0",
-    backgroundColor: "#D7E0E0",
+    borderColor: "#E3F2EF",
+    backgroundColor: "#E3F2EF",
   },
   optionDayBooking: {
     ...communStyle,
