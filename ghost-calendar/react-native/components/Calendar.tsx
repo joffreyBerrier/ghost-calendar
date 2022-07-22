@@ -35,9 +35,6 @@ const CalendarComponent = ({
   checkOut,
   bookingColors = {},
 }: CalendarComponentType) => {
-  const ref = useRef<FlatList>(null);
-  const [index, setIndex] = useState(0);
-
   const { calendar, setPeriod } = useCalendar({
     bookingColors,
     checkIn,
@@ -48,26 +45,6 @@ const CalendarComponent = ({
     startDate,
     visualMonth,
   });
-
-  const showScrollingToIndex = () => {
-    if (ref.current && ref.current.scrollToIndex) {
-      ref.current?.scrollToIndex({
-        index,
-        animated: true,
-      });
-    }
-  };
-
-  useEffect(() => {
-    setTimeout(() => {
-      setIndex(1);
-      showScrollingToIndex();
-    }, 500);
-
-    return () => {
-      setIndex(0);
-    };
-  }, []);
 
   if (!calendar) {
     return (
@@ -95,10 +72,7 @@ const CalendarComponent = ({
       }}
     >
       <FlatList
-        ref={ref}
         showsVerticalScrollIndicator={false}
-        initialScrollIndex={index}
-        onScrollToIndexFailed={() => {}}
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item: month, index }) => (

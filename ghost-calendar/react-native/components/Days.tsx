@@ -61,11 +61,13 @@ export const Days = memo(
     withInteraction,
   }: DayComponentType) => {
     const onPress = (day: DayType) => {
-      if (withInteraction && day.day) {
+      if (day.day) {
         if (day.isBooking) bookingDayHandler(day);
 
-        setPeriod(day);
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        if (withInteraction) {
+          setPeriod(day);
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        }
       }
     };
 
