@@ -61,6 +61,14 @@ export const useCalendar = ({
     }
   };
 
+  const clearCalendar = () => {
+    calendar.clearCalendar(presenter);
+
+    presenter.subscribeVM((calendar) => {
+      setCalendarState(calendar);
+    });
+  };
+
   const setPaginate = (operator: string) => {
     calendar.paginate(presenter, operator);
 
@@ -79,5 +87,6 @@ export const useCalendar = ({
     calendar: calendarState,
     setPeriod,
     setPaginate,
+    resetCalendar: () => clearCalendar(),
   };
 };

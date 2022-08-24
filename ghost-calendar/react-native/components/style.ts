@@ -27,7 +27,7 @@ const selectStyleManager = (day: DayType) => {
   return style.day;
 };
 
-export const styleSelector = (day: DayType) => {
+export const styleSelector = (day: DayType, editMode?: boolean) => {
   if (Object.keys(day).length === 0) {
     return style.day;
   }
@@ -36,7 +36,11 @@ export const styleSelector = (day: DayType) => {
     return style.dayCurrent;
   }
 
-  return selectStyleManager(day);
+  if (editMode && !day.isBooking) {
+    return selectStyleManager(day);
+  }
+
+  return editMode ? style.day : selectStyleManager(day);
 };
 
 const WIDTH = 50;

@@ -19,8 +19,8 @@ import {
 import { CurrentDayPointer } from "./CurrentDayPointer";
 import { CheckIn, CheckOut, CheckInCheckOut } from "./PeriodDelimiter";
 
-type DayComponentType = {
-  bookingDayHandler: (day: DayType) => void;
+export type DayComponentType = {
+  bookingDayHandler?: (day: DayType) => void;
   days: DayType[];
   setPeriod: (day: DayType) => void;
   withInteraction: boolean;
@@ -30,28 +30,32 @@ type CheckMarkerType = {
   day: DayType;
   days: DayType[];
   index: number;
+  editMode?: boolean;
 };
 
-const CheckMarker = memo(({ day, days, index }: CheckMarkerType) => {
-  if (periodHasNotEnDate(day)) {
-    return <CheckIn day={day} />;
-  }
+export const CheckMarker = memo(
+  ({ day, days, index, editMode }: CheckMarkerType) => {
+    if (periodHasNotEnDate(day)) {
+      return <CheckIn day={day} editMode={editMode} />;
+    }
 
-  if (periodHasNotStartDate(day)) {
-    return <CheckOut day={day} />;
-  }
+    if (periodHasNotStartDate(day)) {
+      return <CheckOut day={day} editMode={editMode} />;
+    }
 
-  if (periodHasCompleted(day)) {
-    return (
-      <CheckInCheckOut
-        yesterday={getPreviousDay(days, index)}
-        tomorrow={getNextDay(days, index)}
-      />
-    );
-  }
+    if (periodHasCompleted(day)) {
+      return (
+        <CheckInCheckOut
+          yesterday={getPreviousDay(days, index)}
+          tomorrow={getNextDay(days, index)}
+          editMode={editMode}
+        />
+      );
+    }
 
-  return null;
-});
+    return null;
+  }
+);
 
 export const Days = memo(
   ({
@@ -62,7 +66,7 @@ export const Days = memo(
   }: DayComponentType) => {
     const onPress = (day: DayType) => {
       if (day.day) {
-        if (day.isBooking) bookingDayHandler(day);
+        if (day.isBooking && bookingDayHandler) bookingDayHandler(day);
 
         if (withInteraction) {
           setPeriod(day);

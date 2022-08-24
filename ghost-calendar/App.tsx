@@ -1,23 +1,45 @@
-import { View } from "react-native";
-import { CalendarComponent, rangeDates } from "./react-native/components";
+import { useState } from "react";
+import { View, Button } from "react-native";
+import {
+  CalendarComponent,
+  rangeDates,
+  RangeType,
+} from "./react-native/components";
 
 export default function App() {
+  const [showRange, setShowRange] = useState<RangeType | null>(null);
+
   return (
     <View>
       <CalendarComponent
-        bookingDayHandler={(day) => {
-          /* Return booking day information on click */
-        }}
         rangeMarkerHandler={(range) => {
-          /* return range date selected on click */
+          if (range) setShowRange(range);
         }}
         locale="fr"
         startDate={new Date(new Date().getFullYear(), 0, 1)}
         endDate={new Date(new Date().getFullYear() + 2, 0, 1)}
         visualMonth={24}
         rangeDates={rangeDates}
-        withInteraction
       />
+      {showRange && (
+        <View
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: 50,
+            backgroundColor: "#fff",
+            bottom: 0,
+          }}
+        >
+          <Button
+            title="Reset Calendar"
+            onPress={() => {
+              showRange.resetCalendar();
+              setShowRange(null);
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 }

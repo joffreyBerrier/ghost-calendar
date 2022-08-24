@@ -1,41 +1,45 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import { BookingColorType, DayType, LocaleType, Period } from "../../core";
 
 import { useCalendar } from "../hooks/useCalendar";
 
 import { Days } from "./Days";
+import { EditModeDays } from "./EditModeDays";
 import { Separator } from "./Separator";
+import { RangeType } from "./types";
 import { Week } from "./Week";
 
 type CalendarComponentType = {
-  bookingDayHandler: (day: DayType) => void;
-  locale?: LocaleType;
-  rangeMarkerHandler: (day: { startDate: string; endDate: string }) => void;
-  withInteraction: boolean;
-  startDate: Date;
-  endDate: Date;
+  bookingColors?: BookingColorType;
+  bookingDayHandler?: (day: DayType) => void;
   checkIn?: Date;
   checkOut?: Date;
+  editMode?: boolean;
+  endDate: Date;
+  locale?: LocaleType;
   rangeDates: Required<Period>[];
+  rangeMarkerHandler?: (info: RangeType) => void;
+  startDate: Date;
   visualMonth: number;
-  bookingColors?: BookingColorType;
+  withInteraction?: boolean;
 };
 
 const CalendarComponent = ({
+  bookingColors = {},
   bookingDayHandler,
+  checkIn,
+  checkOut,
+  editMode = false,
+  endDate,
   locale,
   rangeDates,
   rangeMarkerHandler,
-  withInteraction,
   startDate,
-  endDate,
   visualMonth,
-  checkIn,
-  checkOut,
-  bookingColors = {},
+  withInteraction = false,
 }: CalendarComponentType) => {
-  const { calendar, setPeriod } = useCalendar({
+  const { calendar, setPeriod, resetCalendar } = useCalendar({
     bookingColors,
     checkIn,
     checkOut,
@@ -46,19 +50,22 @@ const CalendarComponent = ({
     visualMonth,
   });
 
+  useEffect(() => {
+    if (rangeMarkerHandler && calendar?.checkIn && calendar?.checkOut) {
+      rangeMarkerHandler({
+        startDate: calendar.checkIn,
+        endDate: calendar.checkOut,
+        resetCalendar: () => resetCalendar(),
+      });
+    }
+  }, [calendar]);
+
   if (!calendar) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator />
       </View>
     );
-  }
-
-  if (calendar.checkIn && calendar.checkIn) {
-    rangeMarkerHandler({
-      startDate: calendar.checkIn,
-      endDate: calendar.checkOut,
-    });
   }
 
   return (
@@ -85,12 +92,20 @@ const CalendarComponent = ({
               </Text>
             </View>
             <Week locale={locale} />
-            <Days
-              bookingDayHandler={bookingDayHandler}
-              days={month.days}
-              setPeriod={setPeriod}
-              withInteraction={withInteraction}
-            />
+            {editMode ? (
+              <EditModeDays
+                bookingDayHandler={bookingDayHandler}
+                days={month.days}
+                setPeriod={setPeriod}
+              />
+            ) : (
+              <Days
+                bookingDayHandler={bookingDayHandler}
+                days={month.days}
+                setPeriod={setPeriod}
+                withInteraction={withInteraction}
+              />
+            )}
 
             {index !== calendar.months.length - 1 && <Separator />}
           </View>

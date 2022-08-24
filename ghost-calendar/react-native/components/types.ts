@@ -27,3 +27,9 @@ export type communStyleType = {
   fontSize: number;
   margin: number;
 };
+
+export type RangeType = {
+  startDate: string;
+  endDate: string;
+  resetCalendar: () => void;
+};

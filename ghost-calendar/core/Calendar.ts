@@ -51,6 +51,10 @@ export default class Calendar {
     presenter.paginate(operator, this.props.checkIn, this.props.checkOut);
   }
 
+  clearCalendar(presenter: CalendarPresenter) {
+    presenter.displayInitializePeriod();
+  }
+
   private setActiveIndex(presenter: CalendarPresenter) {
     if (this.props.checkIn && this.props.checkOut) {
       presenter.setActiveIndex(this.props.checkIn, this.props.checkOut);
