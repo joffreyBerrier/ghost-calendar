@@ -12,6 +12,7 @@ export default function App() {
   return (
     <View>
       <CalendarComponent
+        editMode
         rangeMarkerHandler={(range) => {
           if (range) setShowRange(range);
         }}

@@ -57,10 +57,10 @@ export const CheckInCheckOut = ({
     return !editMode ? (
       <>
         {yesterday.bookingType === "option" && (
-          <Image source={require("./optionLeft.png")} style={style.ach2} />
+          <Image source={require("./optionRight.png")} style={style.ach2} />
         )}
         {tomorrow.bookingType === "option" && (
-          <Image source={require("./optionRight.png")} style={style.ach2} />
+          <Image source={require("./optionLeft.png")} style={style.ach2} />
         )}
         <HalfDaySeparator />
         <View style={getTypeColor(yesterday.bookingType, false, true)} />

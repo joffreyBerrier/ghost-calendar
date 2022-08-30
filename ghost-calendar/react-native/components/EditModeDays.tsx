@@ -7,9 +7,15 @@ import { DayComponentType, CheckMarker } from "./Days";
 import { CurrentDayPointer } from "./CurrentDayPointer";
 
 import { DayType } from "../../core/helpers/types";
+import { CalendarVM } from "../../core";
 
-const isDisableDay = (day: DayType) =>
-  day.isPastDay || (day.isBooking && !day.isEndDate && !day.isStartDate);
+const isDisableDay = (day: DayType) => {
+  return (
+    day.isPastDay ||
+    (day.isBooking && !day.isEndDate && !day.isStartDate) ||
+    (day.isBooking && day.isEndDate && day.isStartDate)
+  );
+};
 
 export const EditModeDays = memo(
   ({
