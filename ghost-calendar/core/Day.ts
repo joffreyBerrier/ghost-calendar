@@ -237,22 +237,41 @@ export default class Day {
             this.day.clientFirstname = day.clientFirstname;
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;
-            this.day.clientPrice = day.clientPrice;
+            this.day.ownerPrice = day.ownerPrice;
           }
 
           if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
             this.day.clientFirstname = day.clientFirstname;
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;
-            this.day.clientPrice = day.clientPrice;
+            this.day.ownerPrice = day.ownerPrice;
           }
 
           if (day.endDate === this.day.day) {
             this.day.clientFirstname = day.clientFirstname;
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;
-            this.day.clientPrice = day.clientPrice;
+            this.day.ownerPrice = day.ownerPrice;
           }
+        }
+      });
+    }
+    return this;
+  }
+
+  setOtherType(range: Required<Period>[] | undefined) {
+    if (range) {
+      range.forEach((day) => {
+        if (day.startDate === this.day.day) {
+          this.day.otherType = day.otherType;
+        }
+
+        if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+          this.day.otherType = day.otherType;
+        }
+
+        if (day.endDate === this.day.day) {
+          this.day.otherType = day.otherType;
         }
       });
     }

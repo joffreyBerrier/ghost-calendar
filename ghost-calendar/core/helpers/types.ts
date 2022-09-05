@@ -1,5 +1,14 @@
 export type TypeBookingFormatted = "other" | "owner" | "option" | "contract";
 
+export type TypeBooking =
+  | "Bookings::Admin"
+  | "Bookings::Calendar"
+  | "Bookings::Clientoption"
+  | "Bookings::Contract"
+  | "Bookings::External"
+  | "Bookings::Owner"
+  | "Bookings::Salesoption";
+
 export type DayType = {
   bookingType?: TypeBookingFormatted;
   day?: string;
@@ -16,10 +25,11 @@ export type DayType = {
   isHalfDay?: boolean;
   bookingColor?: string;
   id?: string;
-  clientPrice?: number;
+  ownerPrice?: number;
   clientFirstname?: string;
   clientLastname?: string;
   currencyTrigram?: string;
+  otherType?: TypeBooking;
 };
 
 export type MonthType = {
@@ -37,10 +47,11 @@ export type Period = {
   checkInTime?: number;
   checkOutTime?: number;
   id?: string;
+  otherType?: TypeBooking;
 };
 
 export type ContractInfo = {
-  clientPrice?: number;
+  ownerPrice?: number;
   clientFirstname?: string;
   clientLastname?: string;
   currencyTrigram?: string;
