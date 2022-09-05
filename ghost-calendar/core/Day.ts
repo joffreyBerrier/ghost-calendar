@@ -1,5 +1,10 @@
 import { dayFormatter } from "./helpers/date";
-import { DayType, Period, BookingColorType } from "./helpers/types";
+import {
+  DayType,
+  Period,
+  BookingColorType,
+  BookingInfo,
+} from "./helpers/types";
 import { checkCurrentDayAndPastDay, checkBetweenDates } from "./helpers/utils";
 
 export default class Day {
@@ -224,7 +229,7 @@ export default class Day {
     return this;
   }
 
-  setBookingContractInfo(range: Period[] | undefined) {
+  setBookingContractInfo(range: BookingInfo | undefined) {
     if (range) {
       range.forEach((day) => {
         if (day.type === "contract") {
@@ -235,11 +240,7 @@ export default class Day {
             this.day.clientPrice = day.clientPrice;
           }
 
-          if (
-            day.startDate &&
-            day.endDate &&
-            checkBetweenDates(day.startDate, day.endDate, this.day.day)
-          ) {
+          if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
             this.day.clientFirstname = day.clientFirstname;
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;

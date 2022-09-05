@@ -1,7 +1,7 @@
 import { getMonthDiff } from "./helpers/utils";
 
 import { dayFormatter } from "./helpers/date";
-import { DayType, Period, BookingColorType } from "./helpers/types";
+import { DayType, BookingColorType, BookingInfo } from "./helpers/types";
 import { notifyIfPeriodIsUncompleted } from "./helpers/notifiers";
 
 import { CalendarPresenter } from "./CalendarPresenter";
@@ -13,7 +13,7 @@ export default class Calendar {
       endDate: Date;
       checkIn?: Date;
       checkOut?: Date;
-      rangeDates: Required<Period>[];
+      rangeDates: BookingInfo;
       visualMonth: number;
       bookingColors: BookingColorType;
     }

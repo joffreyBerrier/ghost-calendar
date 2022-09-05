@@ -37,11 +37,16 @@ export type Period = {
   checkInTime?: number;
   checkOutTime?: number;
   id?: string;
+};
+
+export type ContractInfo = {
   clientPrice?: number;
   clientFirstname?: string;
   clientLastname?: string;
   currencyTrigram?: string;
 };
+
+export type BookingInfo = Array<Required<Period> & ContractInfo>;
 
 export type LocaleType = "fr" | "en" | undefined;
 
