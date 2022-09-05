@@ -54,6 +54,7 @@ export default class Month {
           .isCheckInCheckOut(this.props.checkIn, this.props.checkOut)
           .isHalfDay()
           .setBookingId(this.props.rangeDates)
+          .setBookingContractInfo(this.props.rangeDates)
           .build()
       );
     } else {

@@ -16,6 +16,10 @@ export type DayType = {
   isHalfDay?: boolean;
   bookingColor?: string;
   id?: string;
+  clientPrice?: number;
+  clientFirstname?: string;
+  clientLastname?: string;
+  currencyTrigram?: string;
 };
 
 export type MonthType = {
@@ -33,6 +37,10 @@ export type Period = {
   checkInTime?: number;
   checkOutTime?: number;
   id?: string;
+  clientPrice?: number;
+  clientFirstname?: string;
+  clientLastname?: string;
+  currencyTrigram?: string;
 };
 
 export type LocaleType = "fr" | "en" | undefined;

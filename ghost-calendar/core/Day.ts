@@ -224,6 +224,36 @@ export default class Day {
     return this;
   }
 
+  setBookingContractInfo(range: Required<Period>[] | undefined) {
+    if (range) {
+      range.forEach((day) => {
+        if (day.type === "contract") {
+          if (day.startDate === this.day.day) {
+            this.day.clientFirstname = day.clientFirstname;
+            this.day.clientLastname = day.clientLastname;
+            this.day.currencyTrigram = day.currencyTrigram;
+            this.day.clientPrice = day.clientPrice;
+          }
+
+          if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+            this.day.clientFirstname = day.clientFirstname;
+            this.day.clientLastname = day.clientLastname;
+            this.day.currencyTrigram = day.currencyTrigram;
+            this.day.clientPrice = day.clientPrice;
+          }
+
+          if (day.endDate === this.day.day) {
+            this.day.clientFirstname = day.clientFirstname;
+            this.day.clientLastname = day.clientLastname;
+            this.day.currencyTrigram = day.currencyTrigram;
+            this.day.clientPrice = day.clientPrice;
+          }
+        }
+      });
+    }
+    return this;
+  }
+
   build() {
     return { ...this.day };
   }
