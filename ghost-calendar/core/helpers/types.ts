@@ -30,6 +30,7 @@ export type DayType = {
   clientLastname?: string;
   currencyTrigram?: string;
   otherType?: TypeBooking;
+  contractId?: string;
 };
 
 export type MonthType = {
@@ -51,6 +52,7 @@ export type Period = {
 };
 
 export type ContractInfo = {
+  contractId?: string;
   ownerPrice?: number;
   clientFirstname?: string;
   clientLastname?: string;

@@ -238,6 +238,7 @@ export default class Day {
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;
             this.day.ownerPrice = day.ownerPrice;
+            this.day.contractId = day.contractId;
           }
 
           if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
@@ -245,6 +246,7 @@ export default class Day {
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;
             this.day.ownerPrice = day.ownerPrice;
+            this.day.contractId = day.contractId;
           }
 
           if (day.endDate === this.day.day) {
@@ -252,6 +254,7 @@ export default class Day {
             this.day.clientLastname = day.clientLastname;
             this.day.currencyTrigram = day.currencyTrigram;
             this.day.ownerPrice = day.ownerPrice;
+            this.day.contractId = day.contractId;
           }
         }
       });

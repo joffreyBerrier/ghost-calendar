@@ -8,6 +8,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "1",
+    otherType: "Bookings::Admin",
   },
   {
     startDate: "2022-06-01",
@@ -16,6 +17,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "2",
+    otherType: "Bookings::Owner",
   },
   {
     startDate: "2022-07-15",
@@ -24,6 +26,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "3",
+    otherType: "Bookings::Admin",
   },
   {
     startDate: "2022-09-15",
@@ -32,6 +35,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "4",
+    otherType: "Bookings::Admin",
   },
   {
     startDate: "2022-09-18",
@@ -40,6 +44,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "5",
+    otherType: "Bookings::Salesoption",
   },
   {
     startDate: "2022-12-18",
@@ -48,6 +53,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "6",
+    otherType: "Bookings::Salesoption",
   },
   {
     startDate: "2023-02-18",
@@ -56,6 +62,7 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "7",
+    otherType: "Bookings::Admin",
   },
   {
     startDate: "2023-01-18",
@@ -64,5 +71,6 @@ export const rangeDates: Required<Period>[] = [
     checkInTime: 17,
     checkOutTime: 10,
     id: "8",
+    otherType: "Bookings::Contract",
   },
 ];
