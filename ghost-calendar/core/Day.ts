@@ -265,7 +265,7 @@ export default class Day {
   setBookingComment(range: BookingInfo | undefined) {
     if (range) {
       range.forEach((day) => {
-        if (day.type === "contract") {
+        if (day.type === "owner") {
           if (day.startDate === this.day.day) {
             this.day.privateNote = day.privateNote;
           }
