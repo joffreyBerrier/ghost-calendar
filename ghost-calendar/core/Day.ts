@@ -262,6 +262,27 @@ export default class Day {
     return this;
   }
 
+  setBookingComment(range: BookingInfo | undefined) {
+    if (range) {
+      range.forEach((day) => {
+        if (day.type === "contract") {
+          if (day.startDate === this.day.day) {
+            this.day.privateNote = day.privateNote;
+          }
+
+          if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+            this.day.privateNote = day.privateNote;
+          }
+
+          if (day.endDate === this.day.day) {
+            this.day.privateNote = day.privateNote;
+          }
+        }
+      });
+    }
+    return this;
+  }
+
   setOtherType(range: Required<Period>[] | undefined) {
     if (range) {
       range.forEach((day) => {

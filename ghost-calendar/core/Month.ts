@@ -56,6 +56,7 @@ export default class Month {
           .setBookingId(this.props.rangeDates)
           .setBookingContractInfo(this.props.rangeDates)
           .setOtherType(this.props.rangeDates)
+          .setBookingComment(this.props.rangeDates)
           .build()
       );
     } else {

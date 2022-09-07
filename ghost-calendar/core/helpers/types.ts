@@ -31,6 +31,7 @@ export type DayType = {
   currencyTrigram?: string;
   otherType?: TypeBooking;
   contractId?: string;
+  privateNote?: string;
 };
 
 export type MonthType = {
@@ -59,7 +60,11 @@ export type ContractInfo = {
   currencyTrigram?: string;
 };
 
-export type BookingInfo = Array<Required<Period> & ContractInfo>;
+export type OwnerInfo = {
+  privateNote?: string;
+};
+
+export type BookingInfo = Array<Required<Period> & ContractInfo & OwnerInfo>;
 
 export type LocaleType = "fr" | "en" | undefined;
 
