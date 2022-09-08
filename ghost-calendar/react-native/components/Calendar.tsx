@@ -86,7 +86,12 @@ const CalendarComponent = ({
           <View key={`${month.id}${index}`}>
             <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 19 }}>
               <Text
-                style={{ fontWeight: "bold", fontSize: 16, lineHeight: 24 }}
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  lineHeight: 24,
+                  color: "#202020",
+                }}
               >
                 {month.monthName}
               </Text>

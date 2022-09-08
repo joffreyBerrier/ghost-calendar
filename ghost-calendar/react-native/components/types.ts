@@ -26,6 +26,7 @@ export type communStyleType = {
   height: number;
   fontSize: number;
   margin: number;
+  color: string;
 };
 
 export type RangeType = {

@@ -53,6 +53,7 @@ const communStyle: communStyleType = {
   fontSize: 16,
   paddingTop: "4.5%",
   margin: 1,
+  color: "#202020",
 };
 
 export const getTypeColor = (
