@@ -3,11 +3,11 @@ export type TypeBookingFormatted = "other" | "owner" | "option" | "contract";
 export type TypeBooking =
   | "Bookings::Admin"
   | "Bookings::Calendar"
-  | "Bookings::Clientoption"
+  | "Bookings::ClientOption"
   | "Bookings::Contract"
   | "Bookings::External"
   | "Bookings::Owner"
-  | "Bookings::Salesoption";
+  | "Bookings::SalesOption";
 
 export type DayType = {
   bookingType?: TypeBookingFormatted;
