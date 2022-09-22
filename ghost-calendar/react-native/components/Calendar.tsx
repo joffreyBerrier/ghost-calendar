@@ -1,6 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { View, Text, ActivityIndicator, FlatList } from "react-native";
-import { BookingColorType, DayType, LocaleType, Period } from "../../core";
+import {
+  BookingColorType,
+  CalendarVM,
+  DayType,
+  LocaleType,
+  MonthType,
+  Period,
+} from "../../core";
 
 import { useCalendar } from "../hooks/useCalendar";
 
@@ -24,6 +31,60 @@ type CalendarComponentType = {
   visualMonth: number;
   withInteraction?: boolean;
 };
+
+const RenderItem = memo(
+  ({
+    month,
+    index,
+    locale,
+    editMode,
+    bookingDayHandler,
+    setPeriod,
+    withInteraction,
+    calendar,
+  }: {
+    month: MonthType;
+    index: number;
+    locale?: LocaleType;
+    editMode: boolean;
+    bookingDayHandler?: (day: DayType) => void;
+    setPeriod: (day: DayType) => void;
+    withInteraction: boolean;
+    calendar: CalendarVM;
+  }) => (
+    <View key={`${month.id}${index}`}>
+      <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 19 }}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 16,
+            lineHeight: 24,
+            color: "#202020",
+          }}
+        >
+          {month.monthName}
+        </Text>
+      </View>
+      <Week locale={locale} />
+      {editMode ? (
+        <EditModeDays
+          bookingDayHandler={bookingDayHandler}
+          days={month.days}
+          setPeriod={setPeriod}
+        />
+      ) : (
+        <Days
+          bookingDayHandler={bookingDayHandler}
+          days={month.days}
+          setPeriod={setPeriod}
+          withInteraction={withInteraction}
+        />
+      )}
+
+      {index !== calendar.months.length - 1 && <Separator />}
+    </View>
+  )
+);
 
 const CalendarComponent = ({
   bookingColors = {},
@@ -83,37 +144,16 @@ const CalendarComponent = ({
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item: month, index }) => (
-          <View key={`${month.id}${index}`}>
-            <View style={{ marginBottom: 10, marginTop: 25, paddingLeft: 19 }}>
-              <Text
-                style={{
-                  fontWeight: "bold",
-                  fontSize: 16,
-                  lineHeight: 24,
-                  color: "#202020",
-                }}
-              >
-                {month.monthName}
-              </Text>
-            </View>
-            <Week locale={locale} />
-            {editMode ? (
-              <EditModeDays
-                bookingDayHandler={bookingDayHandler}
-                days={month.days}
-                setPeriod={setPeriod}
-              />
-            ) : (
-              <Days
-                bookingDayHandler={bookingDayHandler}
-                days={month.days}
-                setPeriod={setPeriod}
-                withInteraction={withInteraction}
-              />
-            )}
-
-            {index !== calendar.months.length - 1 && <Separator />}
-          </View>
+          <RenderItem
+            month={month}
+            index={index}
+            locale={locale}
+            editMode={editMode}
+            bookingDayHandler={bookingDayHandler}
+            setPeriod={setPeriod}
+            withInteraction={withInteraction}
+            calendar={calendar}
+          />
         )}
       />
     </View>
