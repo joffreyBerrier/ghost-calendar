@@ -37,7 +37,8 @@
     "tsc": "^2.0.4",
     "typescript": "^4.6.3",
     "typescript-compiler": "^1.4.1-2",
-    "xdate": "^0.8.2"
+    "xdate": "^0.8.2",
+    "@shopify/flash-list": "1.1.0"
   },
   "dependencies": {},
   "repository": "https://github.com/joffreyBerrier/ghost-calendar/tree/dev"
