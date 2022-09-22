@@ -140,6 +140,7 @@ const CalendarComponent = ({
       }}
     >
       <FlatList
+        initialNumToRender={5}
         showsVerticalScrollIndicator={false}
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
