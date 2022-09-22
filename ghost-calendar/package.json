@@ -1,6 +1,6 @@
 {
   "name": "lc-ghost-calendar",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "author": "Joffrey Berrier x Ludovic Elice",
   "license": "ISC",
   "description": "",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-typescript": "^7.16.7",
+    "@shopify/flash-list": "1.1.0",
     "@types/jest": "^27.0.3",
     "@types/react": "~18.0.0",
     "@types/react-native": "~0.69.1",
@@ -37,8 +38,7 @@
     "tsc": "^2.0.4",
     "typescript": "^4.6.3",
     "typescript-compiler": "^1.4.1-2",
-    "xdate": "^0.8.2",
-    "@shopify/flash-list": "1.1.0"
+    "xdate": "^0.8.2"
   },
   "dependencies": {},
   "repository": "https://github.com/joffreyBerrier/ghost-calendar/tree/dev"
