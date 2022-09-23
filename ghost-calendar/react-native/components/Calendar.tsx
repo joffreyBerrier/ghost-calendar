@@ -1,6 +1,5 @@
 import { useEffect, memo } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import { FlashList } from "@shopify/flash-list";
+import { View, Text, ActivityIndicator, FlatList } from "react-native";
 import {
   BookingColorType,
   CalendarVM,
@@ -141,8 +140,8 @@ const CalendarComponent = ({
         height: "100%",
       }}
     >
-      <FlashList
-        estimatedItemSize={390}
+      <FlatList
+        initialNumToRender={5}
         showsVerticalScrollIndicator={false}
         data={calendar.months}
         keyExtractor={(item) => String(item.id)}
