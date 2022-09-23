@@ -32,6 +32,7 @@ export type DayType = {
   otherType?: TypeBooking;
   contractId?: string;
   privateNote?: string;
+  isSelectedDate?: boolean;
 };
 
 export type MonthType = {

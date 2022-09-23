@@ -47,6 +47,15 @@ export const rangeDates: Required<Period>[] = [
     otherType: "Bookings::SalesOption",
   },
   {
+    startDate: "2022-12-13",
+    endDate: "2022-12-18",
+    type: "option",
+    checkInTime: 17,
+    checkOutTime: 10,
+    id: "6",
+    otherType: "Bookings::ClientOption",
+  },
+  {
     startDate: "2022-12-18",
     endDate: "2022-12-21",
     type: "option",

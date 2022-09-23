@@ -59,6 +59,7 @@ export default class Day {
   isStartDate(day: string | undefined) {
     if (this.day.day === day) {
       this.day.isStartDate = true;
+      this.day.isSelectedDate = true;
     }
 
     return this;
@@ -67,6 +68,7 @@ export default class Day {
   isEndDate(day: string | undefined) {
     if (this.day.day === day) {
       this.day.isEndDate = true;
+      this.day.isSelectedDate = true;
     }
 
     return this;

@@ -17,6 +17,10 @@ const isDisableDay = (day: DayType) => {
     return true;
   }
 
+  if (day.isEndDate && day.isStartDate && !day.isSelectedDate) {
+    return true;
+  }
+
   return false;
 };
 
