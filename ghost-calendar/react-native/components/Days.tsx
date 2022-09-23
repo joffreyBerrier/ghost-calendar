@@ -97,7 +97,6 @@ export const Days = memo(
               <Text
                 style={{
                   ...(getCurrentDayColor(day) as {}),
-                  textDecorationLine: day.isPastDay ? "line-through" : "none",
                   zIndex: 3,
                 }}
               >
