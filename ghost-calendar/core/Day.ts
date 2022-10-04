@@ -75,9 +75,7 @@ export default class Day {
   }
 
   isHalfDay() {
-    if (this.day.isStartDate && this.day.isEndDate) {
-      this.day.isHalfDay = true;
-    }
+    if (this.day.isStartDate && this.day.isEndDate) this.day.isHalfDay = true;
 
     return this;
   }
@@ -91,14 +89,12 @@ export default class Day {
         dayFormatter(checkOut, "yyyy-MM-dd"),
         this.day.day
       )
-    ) {
+    )
       this.day.isRangeDate = true;
-    }
 
     if (period?.startDate && period?.endDate) {
-      if (checkBetweenDates(period.startDate, period.endDate, this.day.day)) {
+      if (checkBetweenDates(period.startDate, period.endDate, this.day.day))
         this.day.isRangeDate = true;
-      }
     }
 
     return this;
@@ -112,9 +108,8 @@ export default class Day {
           this.day.isBooking = true;
         }
 
-        if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+        if (checkBetweenDates(day.startDate, day.endDate, this.day.day))
           this.day.isBooking = true;
-        }
 
         if (day.endDate === this.day.day) {
           this.day.isEndDate = true;
@@ -138,9 +133,8 @@ export default class Day {
             bookingColors &&
             bookingColors[day.type] &&
             bookingColors[day.type].startEnd
-          ) {
+          )
             this.day.bookingColor = bookingColors[day.type].startEnd;
-          }
         }
 
         if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
@@ -150,9 +144,8 @@ export default class Day {
             bookingColors &&
             bookingColors[day.type] &&
             bookingColors[day.type].beetween
-          ) {
+          )
             this.day.bookingColor = bookingColors[day.type].beetween;
-          }
         }
 
         if (day.endDate === this.day.day) {
@@ -162,9 +155,8 @@ export default class Day {
             bookingColors &&
             bookingColors[day.type] &&
             bookingColors[day.type].startEnd
-          ) {
+          )
             this.day.bookingColor = bookingColors[day.type].startEnd;
-          }
         }
       });
     }
@@ -196,17 +188,14 @@ export default class Day {
   setPeriod(range: Required<Period>[] | undefined) {
     if (range) {
       range.forEach((day) => {
-        if (day.startDate === this.day.day) {
+        if (day.startDate === this.day.day)
           this.day.period = { checkIn: day.startDate, checkOut: day.endDate };
-        }
 
-        if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+        if (checkBetweenDates(day.startDate, day.endDate, this.day.day))
           this.day.period = { checkIn: day.startDate, checkOut: day.endDate };
-        }
 
-        if (day.endDate === this.day.day) {
+        if (day.endDate === this.day.day)
           this.day.period = { checkIn: day.startDate, checkOut: day.endDate };
-        }
       });
     }
     return this;
@@ -215,17 +204,12 @@ export default class Day {
   setBookingId(range: Required<Period>[] | undefined) {
     if (range) {
       range.forEach((day) => {
-        if (day.startDate === this.day.day) {
-          this.day.id = day.id;
-        }
+        if (day.startDate === this.day.day) this.day.id = day.id;
 
-        if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+        if (checkBetweenDates(day.startDate, day.endDate, this.day.day))
           this.day.id = day.id;
-        }
 
-        if (day.endDate === this.day.day) {
-          this.day.id = day.id;
-        }
+        if (day.endDate === this.day.day) this.day.id = day.id;
       });
     }
     return this;
@@ -241,6 +225,9 @@ export default class Day {
             this.day.currencyTrigram = day.currencyTrigram;
             this.day.ownerPrice = day.ownerPrice;
             this.day.contractId = day.contractId;
+            this.day.ownerPrivateToken = day.ownerPrivateToken;
+            this.day.ownerUploadYousignFileToken =
+              day.ownerUploadYousignFileToken;
           }
 
           if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
@@ -249,6 +236,9 @@ export default class Day {
             this.day.currencyTrigram = day.currencyTrigram;
             this.day.ownerPrice = day.ownerPrice;
             this.day.contractId = day.contractId;
+            this.day.ownerPrivateToken = day.ownerPrivateToken;
+            this.day.ownerUploadYousignFileToken =
+              day.ownerUploadYousignFileToken;
           }
 
           if (day.endDate === this.day.day) {
@@ -257,6 +247,9 @@ export default class Day {
             this.day.currencyTrigram = day.currencyTrigram;
             this.day.ownerPrice = day.ownerPrice;
             this.day.contractId = day.contractId;
+            this.day.ownerPrivateToken = day.ownerPrivateToken;
+            this.day.ownerUploadYousignFileToken =
+              day.ownerUploadYousignFileToken;
           }
         }
       });
@@ -268,44 +261,14 @@ export default class Day {
     if (range) {
       range.forEach((day) => {
         if (day.type === "owner") {
-          if (day.startDate === this.day.day) {
+          if (day.startDate === this.day.day)
             this.day.privateNote = day.privateNote;
-          }
 
-          if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+          if (checkBetweenDates(day.startDate, day.endDate, this.day.day))
             this.day.privateNote = day.privateNote;
-          }
 
-          if (day.endDate === this.day.day) {
+          if (day.endDate === this.day.day)
             this.day.privateNote = day.privateNote;
-          }
-        }
-      });
-    }
-    return this;
-  }
-
-  setBookingTokens(range: BookingInfo | undefined) {
-    if (range) {
-      range.forEach((day) => {
-        if (day.type === "contract") {
-          if (day.startDate === this.day.day) {
-            this.day.ownerPrivateToken = day.ownerPrivateToken;
-            this.day.ownerUploadYousignFileToken =
-              day.ownerUploadYousignFileToken;
-          }
-
-          if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
-            this.day.ownerPrivateToken = day.ownerPrivateToken;
-            this.day.ownerUploadYousignFileToken =
-              day.ownerUploadYousignFileToken;
-          }
-
-          if (day.endDate === this.day.day) {
-            this.day.ownerPrivateToken = day.ownerPrivateToken;
-            this.day.ownerUploadYousignFileToken =
-              day.ownerUploadYousignFileToken;
-          }
         }
       });
     }
@@ -315,17 +278,12 @@ export default class Day {
   setOtherType(range: Required<Period>[] | undefined) {
     if (range) {
       range.forEach((day) => {
-        if (day.startDate === this.day.day) {
-          this.day.otherType = day.otherType;
-        }
+        if (day.startDate === this.day.day) this.day.otherType = day.otherType;
 
-        if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+        if (checkBetweenDates(day.startDate, day.endDate, this.day.day))
           this.day.otherType = day.otherType;
-        }
 
-        if (day.endDate === this.day.day) {
-          this.day.otherType = day.otherType;
-        }
+        if (day.endDate === this.day.day) this.day.otherType = day.otherType;
       });
     }
     return this;
