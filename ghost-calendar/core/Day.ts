@@ -285,6 +285,33 @@ export default class Day {
     return this;
   }
 
+  setBookingTokens(range: BookingInfo | undefined) {
+    if (range) {
+      range.forEach((day) => {
+        if (day.type === "contract") {
+          if (day.startDate === this.day.day) {
+            this.day.ownerPrivateToken = day.ownerPrivateToken;
+            this.day.ownerUploadYousignFileToken =
+              day.ownerUploadYousignFileToken;
+          }
+
+          if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
+            this.day.ownerPrivateToken = day.ownerPrivateToken;
+            this.day.ownerUploadYousignFileToken =
+              day.ownerUploadYousignFileToken;
+          }
+
+          if (day.endDate === this.day.day) {
+            this.day.ownerPrivateToken = day.ownerPrivateToken;
+            this.day.ownerUploadYousignFileToken =
+              day.ownerUploadYousignFileToken;
+          }
+        }
+      });
+    }
+    return this;
+  }
+
   setOtherType(range: Required<Period>[] | undefined) {
     if (range) {
       range.forEach((day) => {

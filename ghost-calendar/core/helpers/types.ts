@@ -10,29 +10,31 @@ export type TypeBooking =
   | "Bookings::SalesOption";
 
 export type DayType = {
+  bookingColor?: string;
   bookingType?: TypeBookingFormatted;
-  day?: string;
-  dayNumber?: string;
-  isBooking?: boolean;
-  isRangeDate?: boolean;
-  isCurrentDay?: boolean;
-  isEndDate?: boolean;
-  isPastDay?: boolean;
-  isStartDate?: boolean;
   checkInTime?: number;
   checkOutTime?: number;
-  period?: { checkIn: string; checkOut: string };
-  isHalfDay?: boolean;
-  bookingColor?: string;
-  id?: string;
-  ownerPrice?: number;
   clientFirstname?: string;
   clientLastname?: string;
-  currencyTrigram?: string;
-  otherType?: TypeBooking;
   contractId?: string;
-  privateNote?: string;
+  currencyTrigram?: string;
+  day?: string;
+  dayNumber?: string;
+  id?: string;
+  isBooking?: boolean;
+  isCurrentDay?: boolean;
+  isEndDate?: boolean;
+  isHalfDay?: boolean;
+  isPastDay?: boolean;
+  isRangeDate?: boolean;
   isSelectedDate?: boolean;
+  isStartDate?: boolean;
+  otherType?: TypeBooking;
+  ownerPrice?: number;
+  ownerPrivateToken?: string | null;
+  ownerUploadYousignFileToken?: string | null;
+  period?: { checkIn: string; checkOut: string };
+  privateNote?: string;
 };
 
 export type MonthType = {
@@ -54,11 +56,13 @@ export type Period = {
 };
 
 export type ContractInfo = {
-  contractId?: string;
-  ownerPrice?: number;
   clientFirstname?: string;
   clientLastname?: string;
+  contractId?: string;
   currencyTrigram?: string;
+  ownerPrice?: number;
+  ownerPrivateToken?: string | null;
+  ownerUploadYousignFileToken?: string | null;
 };
 
 export type OwnerInfo = {
