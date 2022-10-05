@@ -4,6 +4,8 @@ import {
   Period,
   BookingColorType,
   BookingInfo,
+  ContractInfo,
+  OwnerInfo,
 } from "./helpers/types";
 import { checkCurrentDayAndPastDay, checkBetweenDates } from "./helpers/utils";
 
@@ -11,6 +13,17 @@ export default class Day {
   private day: DayType = {};
 
   constructor(private currentDay: Date) {}
+
+  private setContractInfo(day: Required<Period> & ContractInfo & OwnerInfo) {
+    this.day.clientFirstname = day.clientFirstname;
+    this.day.clientLastname = day.clientLastname;
+    this.day.currencyTrigram = day.currencyTrigram;
+    this.day.ownerPrice = day.ownerPrice;
+    this.day.contractId = day.contractId;
+    this.day.ownerPrivateToken = day.ownerPrivateToken;
+    this.day.ownerUploadYousignFileToken = day.ownerUploadYousignFileToken;
+    this.day.isManualySignedContract = day.isManualySignedContract;
+  }
 
   getDate() {
     this.day.day = dayFormatter(this.currentDay, "yyyy-MM-dd");
@@ -220,36 +233,15 @@ export default class Day {
       range.forEach((day) => {
         if (day.type === "contract") {
           if (day.startDate === this.day.day) {
-            this.day.clientFirstname = day.clientFirstname;
-            this.day.clientLastname = day.clientLastname;
-            this.day.currencyTrigram = day.currencyTrigram;
-            this.day.ownerPrice = day.ownerPrice;
-            this.day.contractId = day.contractId;
-            this.day.ownerPrivateToken = day.ownerPrivateToken;
-            this.day.ownerUploadYousignFileToken =
-              day.ownerUploadYousignFileToken;
+            this.setContractInfo(day);
           }
 
           if (checkBetweenDates(day.startDate, day.endDate, this.day.day)) {
-            this.day.clientFirstname = day.clientFirstname;
-            this.day.clientLastname = day.clientLastname;
-            this.day.currencyTrigram = day.currencyTrigram;
-            this.day.ownerPrice = day.ownerPrice;
-            this.day.contractId = day.contractId;
-            this.day.ownerPrivateToken = day.ownerPrivateToken;
-            this.day.ownerUploadYousignFileToken =
-              day.ownerUploadYousignFileToken;
+            this.setContractInfo(day);
           }
 
           if (day.endDate === this.day.day) {
-            this.day.clientFirstname = day.clientFirstname;
-            this.day.clientLastname = day.clientLastname;
-            this.day.currencyTrigram = day.currencyTrigram;
-            this.day.ownerPrice = day.ownerPrice;
-            this.day.contractId = day.contractId;
-            this.day.ownerPrivateToken = day.ownerPrivateToken;
-            this.day.ownerUploadYousignFileToken =
-              day.ownerUploadYousignFileToken;
+            this.setContractInfo(day);
           }
         }
       });

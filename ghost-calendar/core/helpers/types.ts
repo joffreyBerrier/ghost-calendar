@@ -25,6 +25,7 @@ export type DayType = {
   isCurrentDay?: boolean;
   isEndDate?: boolean;
   isHalfDay?: boolean;
+  isManualySignedContract?: boolean;
   isPastDay?: boolean;
   isRangeDate?: boolean;
   isSelectedDate?: boolean;
@@ -60,6 +61,7 @@ export type ContractInfo = {
   clientLastname?: string;
   contractId?: string;
   currencyTrigram?: string;
+  isManualySignedContract?: boolean;
   ownerPrice?: number;
   ownerPrivateToken?: string | null;
   ownerUploadYousignFileToken?: string | null;
